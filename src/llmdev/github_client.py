@@ -12,6 +12,7 @@ from github.PullRequest import PullRequest
 from github.Issue import Issue
 
 from llmdev.config import Config
+from llmdev.cache import DiskCache, RateLimiter
 
 
 logger = logging.getLogger(__name__)
@@ -29,6 +30,10 @@ class GitHubClient:
         """
         self.config = config
         self.github = Github(config.github_token) if config.github_token else Github()
+        
+        # Initialize caching if enabled
+        self.cache = DiskCache() if config.enable_cache else None
+        self.rate_limiter = RateLimiter() if config.enable_rate_limiting else None
         
     def get_repository(self, owner: str, repo: str) -> Repository:
         """

@@ -9,6 +9,7 @@ from datetime import datetime
 from llmdev.config import Config
 from llmdev.github_client import GitHubClient
 from llmdev.detector import CopilotDetector, Detection
+from llmdev.analyzers import PRAnalyzer, IterationAnalyzer, PromptAnalyzer
 
 
 logger = logging.getLogger(__name__)
@@ -27,6 +28,16 @@ class RepositoryAnalyzer:
         self.config = config
         self.github_client = GitHubClient(config)
         self.detector = CopilotDetector()
+        
+        # Initialize deep analyzers if enabled
+        if config.deep_analysis:
+            self.pr_analyzer = PRAnalyzer()
+            self.iteration_analyzer = IterationAnalyzer()
+            self.prompt_analyzer = PromptAnalyzer()
+        else:
+            self.pr_analyzer = None
+            self.iteration_analyzer = None
+            self.prompt_analyzer = None
         
     def analyze(self, owner: str, repo: str) -> Dict[str, Any]:
         """
@@ -98,6 +109,12 @@ class RepositoryAnalyzer:
             'detections': all_detections,
             'summary': summary,
         }
+        
+        # Add deep analysis if enabled
+        if self.config.deep_analysis:
+            logger.info("Running deep analysis...")
+            deep_analysis = self._run_deep_analysis(prs_data, commits_data)
+            results['deep_analysis'] = deep_analysis
         
         logger.info("Analysis complete")
         return results
@@ -183,3 +200,70 @@ class RepositoryAnalyzer:
         
         logger.info(f"Collected {len(issues_data)} issues")
         return issues_data
+    
+    def _run_deep_analysis(
+        self, 
+        prs_data: List[Dict[str, Any]], 
+        commits_data: List[Dict[str, Any]]
+    ) -> Dict[str, Any]:
+        """
+        Run deep analysis on PRs using specialized analyzers.
+        
+        Args:
+            prs_data: List of PR data
+            commits_data: List of commit data
+            
+        Returns:
+            Dictionary with deep analysis results
+        """
+        pr_analyses = []
+        all_prompts = []
+        
+        for pr_data in prs_data:
+            # Get commits for this PR if needed
+            pr_commits = []
+            if self.config.analyze_commits_per_pr:
+                # In a real implementation, we'd fetch commits per PR
+                # For now, use iteration count from PR metadata
+                pass
+            
+            # Analyze PR content
+            pr_analysis = self.pr_analyzer.analyze_pr(pr_data, pr_commits)
+            
+            # Analyze iterations
+            iterations = self.iteration_analyzer.analyze_iterations(pr_data, pr_commits)
+            pr_analysis['iterations'] = iterations
+            
+            # Analyze prompts
+            prompts = pr_analysis.get('prompt_extraction', [])
+            for prompt in prompts:
+                prompt_analysis = self.prompt_analyzer.analyze_prompt(
+                    prompt.get('content', ''),
+                    outcome_data={
+                        'iteration_count': pr_analysis.get('iteration_count', 0),
+                        'complexity_score': pr_analysis.get('complexity_score', 0),
+                        'merged': pr_data.get('merged', False),
+                    }
+                )
+                prompt_analysis['pr_number'] = pr_data.get('number')
+                all_prompts.append(prompt_analysis)
+            
+            pr_analyses.append(pr_analysis)
+        
+        # Generate aggregate summaries
+        iteration_summary = self.iteration_analyzer.get_iteration_summary(pr_analyses)
+        prompt_patterns = self.prompt_analyzer.extract_prompt_patterns(all_prompts)
+        
+        # Categorize PRs
+        category_distribution = {}
+        for pr_analysis in pr_analyses:
+            category = pr_analysis.get('category', 'unknown')
+            category_distribution[category] = category_distribution.get(category, 0) + 1
+        
+        return {
+            'pr_analyses': pr_analyses,
+            'iteration_summary': iteration_summary,
+            'prompt_patterns': prompt_patterns,
+            'category_distribution': category_distribution,
+            'total_prompts_found': len(all_prompts),
+        }

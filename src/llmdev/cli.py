@@ -68,6 +68,16 @@ def cli():
     default=50,
     help='Maximum number of issues to analyze (default: 50)'
 )
+@click.option(
+    '--deep-analysis',
+    is_flag=True,
+    help='Enable deep analysis with prompt extraction, iteration patterns, and categorization'
+)
+@click.option(
+    '--no-cache',
+    is_flag=True,
+    help='Disable caching of API responses'
+)
 def analyze(
     repository: str,
     token: Optional[str],
@@ -75,7 +85,9 @@ def analyze(
     verbose: bool,
     max_commits: int,
     max_prs: int,
-    max_issues: int
+    max_issues: int,
+    deep_analysis: bool,
+    no_cache: bool
 ):
     """
     Analyze a GitHub repository for LLM-generated code.
@@ -116,12 +128,16 @@ def analyze(
         max_commits=max_commits,
         max_prs=max_prs,
         max_issues=max_issues,
-        verbose=verbose
+        verbose=verbose,
+        deep_analysis=deep_analysis,
+        enable_cache=not no_cache,
     )
     
     try:
         # Initialize analyzer
         logger.info("Initializing repository analyzer...")
+        if deep_analysis:
+            logger.info("Deep analysis mode enabled - extracting prompts, patterns, and iterations")
         analyzer = RepositoryAnalyzer(config)
         
         # Run analysis

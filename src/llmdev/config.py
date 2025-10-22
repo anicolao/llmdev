@@ -22,6 +22,15 @@ class Config:
     api_retry_attempts: int = 3
     api_retry_delay: int = 2  # seconds
     
+    # Caching and rate limiting (MVP2 features)
+    enable_cache: bool = True
+    cache_ttl: int = 3600  # seconds (1 hour)
+    enable_rate_limiting: bool = True
+    
+    # Deep analysis features (MVP2)
+    deep_analysis: bool = False
+    analyze_commits_per_pr: bool = False
+    
     def __post_init__(self):
         """Ensure output_dir is a Path object."""
         if not isinstance(self.output_dir, Path):
