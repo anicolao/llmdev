@@ -31,7 +31,7 @@ def cli():
     pass
 
 
-@cli.command()
+@cli.command(hidden=True)  # Hidden from help - use generate-instructions instead
 @click.argument("repository")
 @click.option(
     "--token", envvar="GITHUB_TOKEN", help="GitHub API token (can also use GITHUB_TOKEN env var)"
@@ -74,15 +74,47 @@ def analyze(
     no_cache: bool,
 ):
     """
-    Analyze a GitHub repository for LLM-generated code.
+    [DEPRECATED] Analyze a GitHub repository for LLM-generated code using REST API.
+    
+    ⚠️  WARNING: This command is deprecated due to GitHub API rate limits.
+    
+    For repositories with more than a few PRs, this will likely fail with rate limit errors.
+    
+    🚀 RECOMMENDED: Use 'generate-instructions' command instead:
+       llmdev generate-instructions owner/repo --phase intro
+    
+    The generate-instructions approach uses MCP GitHub server which avoids rate limits
+    and produces better, more comprehensive case studies.
 
     REPOSITORY should be in the format 'owner/repo' (e.g., 'microsoft/vscode')
-
-    Example:
-        llmdev analyze microsoft/vscode --token YOUR_TOKEN
     """
     setup_logging(verbose)
     logger = logging.getLogger(__name__)
+    
+    # Show deprecation warning
+    click.echo("=" * 70, err=True)
+    click.echo("⚠️  DEPRECATION WARNING", err=True)
+    click.echo("=" * 70, err=True)
+    click.echo("This command is deprecated and likely to fail on real repositories.", err=True)
+    click.echo("", err=True)
+    click.echo("GitHub API rate limits:", err=True)
+    click.echo("  - Unauthenticated: 60 requests/hour", err=True)
+    click.echo("  - Authenticated: 5,000 requests/hour", err=True)
+    click.echo("", err=True)
+    click.echo("A typical repository analysis requires hundreds or thousands of API calls.", err=True)
+    click.echo("", err=True)
+    click.echo("🚀 RECOMMENDED APPROACH:", err=True)
+    click.echo(f"   llmdev generate-instructions {repository} --phase intro", err=True)
+    click.echo("", err=True)
+    click.echo("This creates phase-by-phase instructions for MCP-enabled tools", err=True)
+    click.echo("that avoid rate limits entirely.", err=True)
+    click.echo("=" * 70, err=True)
+    click.echo("", err=True)
+    
+    # Ask for confirmation to continue
+    if not click.confirm("Do you want to continue with the deprecated analyze command?"):
+        click.echo("Aborted. Use 'generate-instructions' instead.")
+        sys.exit(0)
 
     logger.info(f"Starting analysis of repository: {repository}")
 
@@ -151,20 +183,47 @@ def analyze(
     type=click.Path(),
     help="Output directory for instructions (default: output/)",
 )
-def generate_instructions(repository: str, output: str):
+@click.option(
+    "--phase",
+    "-p",
+    type=click.Choice([
+        "intro", "overview", "detection", "story", "prompts",
+        "iteration", "patterns", "recommendations", "synthesis"
+    ], case_sensitive=False),
+    help="Generate instructions for a specific phase (intro, overview, detection, story, prompts, iteration, patterns, recommendations, synthesis)",
+)
+def generate_instructions(repository: str, output: str, phase: Optional[str]):
     """
     Generate MCP-compatible analysis instructions for a repository.
 
-    This command creates a comprehensive instruction document that guides
+    This command creates structured instruction documents that guide
     MCP-enabled tools (like GitHub Copilot) through analyzing a repository
     to create a case study. This approach avoids API rate limits by using
     the MCP GitHub server directly.
 
+    Instructions are broken into phases to avoid overwhelming context windows:
+    
+    - intro: Introduction and setup
+    - overview: Repository metadata and statistics  
+    - detection: LLM usage pattern detection
+    - story: Development story arc extraction
+    - prompts: Prompt and request analysis
+    - iteration: Iteration pattern analysis
+    - patterns: Development pattern identification
+    - recommendations: Best practices synthesis
+    - synthesis: Executive summary and completion
+
     REPOSITORY should be in the format 'owner/repo' (e.g., 'microsoft/vscode')
 
-    Example:
+    Examples:
+        # Start analysis - get introduction and workflow
+        llmdev generate-instructions owner/repo --phase intro
+        
+        # Get next phase instructions
+        llmdev generate-instructions owner/repo --phase overview
+        
+        # Generate full instructions (legacy mode, not recommended for large analysis)
         llmdev generate-instructions owner/repo
-        llmdev generate-instructions owner/repo --output ./instructions
     """
     logger = logging.getLogger(__name__)
     
@@ -180,17 +239,30 @@ def generate_instructions(repository: str, output: str):
     output_path.mkdir(parents=True, exist_ok=True)
     
     try:
-        logger.info(f"Generating analysis instructions for {owner}/{repo}")
         generator = MCPInstructionsGenerator(output_path)
-        instructions_path = generator.generate(owner, repo)
+        instructions_path = generator.generate(owner, repo, phase=phase)
         
         click.echo(f"\n✓ Instructions generated successfully!")
         click.echo(f"✓ File saved to: {instructions_path}")
-        click.echo(f"\nNext steps:")
-        click.echo(f"1. Open the instructions file in an MCP-enabled tool (e.g., GitHub Copilot)")
-        click.echo(f"2. Follow the structured analysis steps")
-        click.echo(f"3. Save your case study to: case_studies/GITHUB_{owner.upper()}_{repo.upper()}.md")
-        click.echo(f"\nThis approach avoids API rate limits by using the MCP GitHub server.")
+        
+        if phase:
+            click.echo(f"\n📋 Phase: {phase}")
+            click.echo(f"Follow the instructions in the file, then run:")
+            
+            # Suggest next phase
+            phases = MCPInstructionsGenerator.PHASES
+            if phase in phases:
+                current_idx = phases.index(phase)
+                if current_idx < len(phases) - 1:
+                    next_phase = phases[current_idx + 1]
+                    click.echo(f"  llmdev generate-instructions {owner}/{repo} --phase {next_phase}")
+                else:
+                    click.echo(f"\n🎉 This is the final phase. Your case study should now be complete!")
+                    click.echo(f"📄 Save to: case_studies/GITHUB_{owner.upper()}_{repo.upper()}.md")
+        else:
+            click.echo(f"\n⚠️  Note: Full instructions mode generates a large document.")
+            click.echo(f"   Consider using --phase flag for step-by-step analysis:")
+            click.echo(f"   llmdev generate-instructions {owner}/{repo} --phase intro")
         
     except Exception as e:
         logger.exception("Failed to generate instructions")
