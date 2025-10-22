@@ -49,9 +49,44 @@ pip install -e ".[dev]"
 
 ## Usage
 
-### Basic Usage
+llmdev provides two approaches for analyzing repositories:
 
-Analyze a GitHub repository:
+### Approach 1: Generate MCP Analysis Instructions (Recommended for Large Repositories)
+
+**Best for:** Repositories with 100+ PRs or when you want to avoid API rate limits
+
+Generate structured analysis instructions that can be used with MCP-enabled tools (like GitHub Copilot):
+
+```bash
+llmdev generate-instructions owner/repo
+```
+
+This creates a comprehensive instruction document that guides you through:
+- Repository overview and statistics
+- LLM usage pattern detection
+- Development story arc extraction
+- Prompt and iteration analysis
+- Best practices identification
+
+**Advantages:**
+- No API rate limits (uses MCP GitHub server)
+- Works with repositories of any size
+- Proven approach (used to create case studies in PR #8)
+- Takes 2-3 hours for comprehensive analysis
+- Outputs professional case study document
+
+For example:
+
+```bash
+llmdev generate-instructions microsoft/vscode
+# Opens ANALYZE_MICROSOFT_VSCODE.md with detailed instructions
+```
+
+### Approach 2: Direct Python Analysis (Legacy, Limited by API Rate Limits)
+
+**Best for:** Small repositories (<50 PRs) or quick statistical analysis
+
+Analyze a GitHub repository directly:
 
 ```bash
 llmdev analyze owner/repo
@@ -62,6 +97,8 @@ For example:
 ```bash
 llmdev analyze microsoft/vscode
 ```
+
+**Note:** This approach may hit GitHub API rate limits on larger repositories. For comprehensive analysis of repositories with 100+ PRs, use the MCP instructions approach instead.
 
 ### GitHub Token Authentication
 
@@ -132,7 +169,23 @@ llmdev --help
 
 # Command-specific help
 llmdev analyze --help
+llmdev generate-instructions --help
 ```
+
+### Choosing the Right Approach
+
+**Use `generate-instructions` when:**
+- Analyzing large repositories (100+ PRs)
+- You want comprehensive case study output
+- API rate limits are a concern
+- You have access to MCP-enabled tools (GitHub Copilot)
+- You want to follow proven methodology from PR #8
+
+**Use `analyze` when:**
+- Quick statistical analysis is sufficient
+- Repository is small (<50 PRs)
+- You need automated output
+- You have GitHub API token with high rate limits
 
 ## Output
 

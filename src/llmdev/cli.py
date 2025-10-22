@@ -11,6 +11,7 @@ from typing import Optional
 from llmdev.analyzer import RepositoryAnalyzer
 from llmdev.reporter import ReportGenerator
 from llmdev.config import Config
+from llmdev.mcp_instructions import MCPInstructionsGenerator
 
 
 def setup_logging(verbose: bool) -> None:
@@ -137,6 +138,62 @@ def analyze(
 
     except Exception as e:
         logger.exception("Analysis failed")
+        click.echo(f"Error: {str(e)}", err=True)
+        sys.exit(1)
+
+
+@cli.command()
+@click.argument("repository")
+@click.option(
+    "--output",
+    "-o",
+    default="output",
+    type=click.Path(),
+    help="Output directory for instructions (default: output/)",
+)
+def generate_instructions(repository: str, output: str):
+    """
+    Generate MCP-compatible analysis instructions for a repository.
+
+    This command creates a comprehensive instruction document that guides
+    MCP-enabled tools (like GitHub Copilot) through analyzing a repository
+    to create a case study. This approach avoids API rate limits by using
+    the MCP GitHub server directly.
+
+    REPOSITORY should be in the format 'owner/repo' (e.g., 'microsoft/vscode')
+
+    Example:
+        llmdev generate-instructions owner/repo
+        llmdev generate-instructions owner/repo --output ./instructions
+    """
+    logger = logging.getLogger(__name__)
+    
+    # Validate repository format
+    if "/" not in repository:
+        click.echo("Error: Repository must be in format 'owner/repo'", err=True)
+        sys.exit(1)
+
+    owner, repo = repository.split("/", 1)
+    
+    # Create output directory
+    output_path = Path(output)
+    output_path.mkdir(parents=True, exist_ok=True)
+    
+    try:
+        logger.info(f"Generating analysis instructions for {owner}/{repo}")
+        generator = MCPInstructionsGenerator(output_path)
+        instructions_path = generator.generate(owner, repo)
+        
+        click.echo(f"\n✓ Instructions generated successfully!")
+        click.echo(f"✓ File saved to: {instructions_path}")
+        click.echo(f"\nNext steps:")
+        click.echo(f"1. Open the instructions file in an MCP-enabled tool (e.g., GitHub Copilot)")
+        click.echo(f"2. Follow the structured analysis steps")
+        click.echo(f"3. Save your case study to: case_studies/GITHUB_{owner.upper()}_{repo.upper()}.md")
+        click.echo(f"\nThis approach avoids API rate limits by using the MCP GitHub server.")
+        
+    except Exception as e:
+        logger.exception("Failed to generate instructions")
         click.echo(f"Error: {str(e)}", err=True)
         sys.exit(1)
 
