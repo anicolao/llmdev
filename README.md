@@ -49,19 +49,24 @@ pip install -e ".[dev]"
 
 ## Usage
 
-llmdev provides two approaches for analyzing repositories:
+llmdev provides a phased instruction approach for analyzing repositories:
 
-### Approach 1: Generate MCP Analysis Instructions (Recommended for Large Repositories)
+### Recommended Approach: Phased Analysis with MCP Tools
 
-**Best for:** Repositories with 100+ PRs or when you want to avoid API rate limits
+**Best for:** All repository sizes, comprehensive case studies, avoiding API rate limits
 
-Generate structured analysis instructions that can be used with MCP-enabled tools (like GitHub Copilot):
+Generate phase-by-phase instructions that guide MCP-enabled tools (like GitHub Copilot) through repository analysis:
 
 ```bash
-llmdev generate-instructions owner/repo
+# Start with the introduction phase
+llmdev generate-instructions owner/repo --phase intro
+
+# Progress through each phase sequentially:
+# intro → overview → detection → story → prompts → 
+# iteration → patterns → recommendations → synthesis
 ```
 
-This creates a comprehensive instruction document that guides you through:
+This creates focused instruction documents for each analysis phase, guiding you through:
 - Repository overview and statistics
 - LLM usage pattern detection
 - Development story arc extraction
@@ -69,97 +74,39 @@ This creates a comprehensive instruction document that guides you through:
 - Best practices identification
 
 **Advantages:**
-- No API rate limits (uses MCP GitHub server)
-- Works with repositories of any size
-- Proven approach (used to create case studies in PR #8)
-- Takes 2-3 hours for comprehensive analysis
-- Outputs professional case study document
+- ✅ No API rate limits (uses MCP GitHub server)
+- ✅ Works with repositories of any size (tested on 900+ commits, 180+ PRs)
+- ✅ Proven approach (used to create all case studies)
+- ✅ Takes 2-3 hours for comprehensive 30-50 page case study
+- ✅ Produces professional, actionable output
 
-For example:
-
+**Example workflow:**
 ```bash
-llmdev generate-instructions microsoft/vscode
-# Opens ANALYZE_MICROSOFT_VSCODE.md with detailed instructions
+# Phase 1: Introduction and setup
+llmdev generate-instructions anicolao/dikuclient --phase intro
+# Follow instructions in generated file with your MCP tool
+
+# Phase 2: Repository overview
+llmdev generate-instructions anicolao/dikuclient --phase overview
+# Continue following instructions
+
+# Repeat for all phases until synthesis (final phase)
 ```
 
-### Approach 2: Direct Python Analysis (Legacy, Limited by API Rate Limits)
+### Legacy Direct Analysis (Deprecated)
 
-**Best for:** Small repositories (<50 PRs) or quick statistical analysis
-
-Analyze a GitHub repository directly:
+**⚠️ Not recommended:** The direct Python analysis approach hits API rate limits on most real repositories.
 
 ```bash
 llmdev analyze owner/repo
 ```
 
-For example:
+This command directly calls GitHub APIs and will likely fail on repositories with more than a few dozen PRs due to rate limits. It remains available for:
+- Very small repositories (<20 PRs)
+- Testing and development
+- Specific edge cases
 
-```bash
-llmdev analyze microsoft/vscode
-```
-
-**Note:** This approach may hit GitHub API rate limits on larger repositories. For comprehensive analysis of repositories with 100+ PRs, use the MCP instructions approach instead.
-
-### GitHub Token Authentication
-
-For better API rate limits and access to private repositories, provide a GitHub personal access token:
-
-```bash
-# Using environment variable (recommended)
-export GITHUB_TOKEN=your_token_here
-llmdev analyze owner/repo
-
-# Or using command-line option
-llmdev analyze owner/repo --token your_token_here
-```
-
-To create a GitHub token:
-1. Go to https://github.com/settings/tokens
-2. Click "Generate new token (classic)"
-3. Select scopes: `repo` (for private repos) or `public_repo` (for public repos only)
-4. Copy the generated token
-
-### Advanced Options
-
-```bash
-# Specify output directory
-llmdev analyze owner/repo --output ./reports
-
-# Limit analysis scope
-llmdev analyze owner/repo --max-commits 50 --max-prs 25 --max-issues 25
-
-# Enable verbose logging
-llmdev analyze owner/repo --verbose
-
-# Enable deep analysis (MVP2 feature)
-llmdev analyze owner/repo --deep-analysis
-
-# Disable caching
-llmdev analyze owner/repo --no-cache
-```
-
-### Deep Analysis Mode (MVP2)
-
-The `--deep-analysis` flag enables advanced analysis features:
-
-**Features:**
-- **PR Content Analysis**: Extracts prompts, problem statements, solutions, and checklists from PR descriptions
-- **Iteration Patterns**: Tracks commit sequences and identifies refinement patterns (quick wins vs complex work)
-- **Prompt Analysis**: Measures prompt specificity, context, constraints, and effectiveness
-- **Smart Categorization**: Classifies PRs by type (vision/foundation/feature/fix/refine/docs)
-- **Enhanced Reports**: Generates insights about development patterns, prompt effectiveness, and iteration statistics
-
-**Example:**
-```bash
-llmdev analyze anicolao/dikuclient --deep-analysis
-```
-
-**Deep Analysis Report Sections:**
-- PR Category Distribution
-- Iteration Patterns (average commits per PR, pattern distribution)
-- Prompt Analysis (specificity scores, characteristics)
-- Most Complex PRs (with complexity indicators)
-- Quick Wins (1-2 commit PRs)
+**For all other use cases, use the phased instruction approach above.**
 
 ### Command Help
 
@@ -168,56 +115,32 @@ llmdev analyze anicolao/dikuclient --deep-analysis
 llmdev --help
 
 # Command-specific help
-llmdev analyze --help
 llmdev generate-instructions --help
 ```
 
-### Choosing the Right Approach
-
-**Use `generate-instructions` when:**
-- Analyzing large repositories (100+ PRs)
-- You want comprehensive case study output
-- API rate limits are a concern
-- You have access to MCP-enabled tools (GitHub Copilot)
-- You want to follow proven methodology from PR #8
-
-**Use `analyze` when:**
-- Quick statistical analysis is sufficient
-- Repository is small (<50 PRs)
-- You need automated output
-- You have GitHub API token with high rate limits
-
 ## Output
 
-The tool generates a markdown report in the output directory with:
+The phased instruction approach generates comprehensive case studies with:
 
-### Standard Analysis
-- Repository overview and statistics
-- Analysis scope (commits, PRs, issues analyzed)
-- Copilot detection summary
-- Detailed findings with links to specific commits, PRs, and issues
-- Breakdown by source type and detection method
+### Standard Sections
+- **Executive Summary**: Key findings at a glance
+- **Repository Overview**: Basic statistics and context
+- **Development Story Arc**: How the project evolved over time
+- **LLM Usage Patterns**: Copilot mentions and usage evidence
+- **Prompt Analysis**: Effective prompts and patterns
+- **Iteration Patterns**: Quick wins vs complex work
+- **Development Patterns**: Successful practices and anti-patterns
+- **Best Practices**: Actionable recommendations
+- **Technical Insights**: Technology-specific observations
 
-### Deep Analysis (--deep-analysis flag)
-Additional sections when deep analysis is enabled:
-- **PR Category Distribution**: Shows how PRs are categorized (vision, foundation, feature, fix, refine, docs)
-- **Iteration Patterns**: Average commits per PR, refinement counts, and pattern distribution
-- **Prompt Analysis**: Statistics on prompt characteristics (specificity, context, constraints, examples)
-- **Most Complex PRs**: Top 5 complex PRs with indicators explaining complexity
-- **Quick Wins**: List of PRs that merged with 1-2 commits
+### Example Output
 
-## Detection Methods
+See existing case studies in the `case_studies/` directory:
+- `GITHUB_ANICOLAO_DIKUCLIENT.md` - 60+ page comprehensive analysis
+- `GITHUB_ANICOLAO_DIKUMUD.md` - 40+ page detailed case study
+- `GITHUB_ANICOLAO_DIKU.md` - Complete analysis of 30 issues
 
-The MVP focuses on detecting explicit Copilot mentions and patterns:
-
-1. **Explicit Mentions**: Searches for keywords like "copilot", "github copilot", "co-pilot" in:
-   - Commit messages
-   - PR titles and descriptions
-   - PR comments and reviews
-   - Issue titles and descriptions
-   - Issue comments
-
-2. **Bot Attribution**: Identifies commits or contributions from Copilot-related bot accounts
+Each demonstrates the depth and quality achievable with the phased instruction approach.
 
 ## Testing
 
@@ -237,47 +160,38 @@ pytest --cov=llmdev --cov-report=html
 
 This project is in active development. Current status:
 
-### MVP 1.0 (Complete)
-Basic detection and reporting capabilities. See [MVP.md](MVP.md) for details.
+### MVP (Complete)
+Phased instruction generation for comprehensive repository analysis. See [MVP.md](MVP.md) for details.
 
-### MVP 2.0 (Current)
-Enhanced analysis capabilities for case study generation:
-- ✅ Deep PR content analysis (prompts, problems, solutions)
-- ✅ Iteration pattern detection and classification
-- ✅ Prompt effectiveness analysis
-- ✅ Smart PR categorization
-- ✅ API response caching and rate limiting
-- ✅ Enhanced report generation
+**Key Features:**
+- ✅ Phase-by-phase instruction generation
+- ✅ MCP tool integration guidance
+- ✅ Comprehensive case study format
+- ✅ Works on repositories of any size
+- ✅ No API rate limit issues
 
-See [MVP2.md](MVP2.md) for the complete feature specification and [VISION.md](VISION.md) for long-term goals.
+### Enhanced Analysis (MVP 2.0)
 
-### Key Features Added in MVP 2.0
+Additional analysis capabilities available but primarily for reference:
+- Deep PR content analysis (prompts, problems, solutions)
+- Iteration pattern detection and classification
+- Prompt effectiveness analysis
+- Smart PR categorization
 
-**Analyzers Module**:
-- `PRAnalyzer`: Extracts structured content from PR descriptions
-- `IterationAnalyzer`: Classifies development patterns (quick wins, normal, complex)
-- `PromptAnalyzer`: Measures prompt quality and effectiveness
-
-**Caching Infrastructure**:
-- `DiskCache`: TTL-based caching for API responses
-- `RateLimiter`: Intelligent rate limit management with exponential backoff
-
-**Usage Example**:
-```bash
-# Basic analysis (MVP 1.0)
-llmdev analyze owner/repo
-
-# Deep analysis with caching (MVP 2.0)
-llmdev analyze owner/repo --deep-analysis
-```
+See [MVP2.md](MVP2.md) for enhancement specifications and [VISION.md](VISION.md) for long-term goals.
 
 ## Contributing
 
-We welcome contributions! As we develop the tools and methodologies, we'll be looking for:
+We welcome contributions! The llmdev project focuses on understanding how LLMs are used in real software development.
 
-- Ideas for detection and analysis approaches
-- Case studies from real projects
-- Feedback on the tools and frameworks we develop
+**Ways to contribute:**
+- Create new case studies using the phased instruction approach
+- Improve instruction templates and guidance
+- Enhance phase instructions with additional examples
+- Share insights from your repository analyses
+- Suggest improvements to the case study format
+
+See the `.github/copilot-instructions.md` file for detailed guidance on working with this project.
 
 ## License
 

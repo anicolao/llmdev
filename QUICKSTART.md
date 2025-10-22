@@ -6,7 +6,7 @@ Get started with `llmdev` in just a few minutes!
 
 - Python 3.8 or higher
 - pip (Python package installer)
-- A GitHub account (for API token)
+- Access to an MCP-enabled tool (like GitHub Copilot)
 
 ## Installation
 
@@ -30,154 +30,158 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -e .
 ```
 
-## Get a GitHub Token
+## Your First Analysis
 
-To avoid rate limits and access repositories effectively, you'll need a GitHub Personal Access Token:
+llmdev uses a phased instruction approach to guide you through repository analysis:
 
-1. Go to https://github.com/settings/tokens
-2. Click **"Generate new token (classic)"**
-3. Give it a descriptive name (e.g., "llmdev analysis")
-4. Select scopes:
-   - For **public repositories only**: Select `public_repo`
-   - For **private repositories**: Select `repo`
-5. Click **"Generate token"**
-6. **Copy the token immediately** (you won't see it again!)
-
-## Choose Your Analysis Approach
-
-llmdev offers two ways to analyze repositories:
-
-### Option 1: MCP Instructions (Recommended for Comprehensive Analysis)
-
-**Best for:** Creating detailed case studies, large repositories (100+ PRs), avoiding API rate limits
-
-Generate analysis instructions that guide you through comprehensive repository analysis:
+### Step 1: Generate Introduction Instructions
 
 ```bash
-llmdev generate-instructions owner/repo
+llmdev generate-instructions owner/repo --phase intro
 ```
 
-This creates a structured instruction document that you can follow using MCP-enabled tools (like GitHub Copilot). No API token needed! Takes 2-3 hours but produces a comprehensive 30-50 page case study.
+This creates an instruction file (e.g., `ANALYZE_OWNER_REPO_PHASE_INTRO.md`) with:
+- Background on the llmdev project
+- Overview of the analysis process
+- Guidance for getting started
 
-**Example:**
-```bash
-llmdev generate-instructions anicolao/dikuclient --output ./instructions
-# Opens: instructions/ANALYZE_ANICOLAO_DIKUCLIENT.md
-# Follow the 8-phase analysis process with your MCP-enabled tool
-```
+### Step 2: Follow the Instructions
 
-### Option 2: Direct Python Analysis (Legacy)
+Open the generated file and follow the instructions using your MCP-enabled tool (like GitHub Copilot). Each phase provides:
+- Clear objectives
+- Specific tasks to complete
+- Expected outputs
+- Time estimates
 
-**Best for:** Quick statistics, small repositories (<50 PRs)
-
-#### Set Your GitHub Token
-
-```bash
-export GITHUB_TOKEN=your_token_here
-```
-
-Or on Windows (PowerShell):
-```powershell
-$env:GITHUB_TOKEN="your_token_here"
-```
-
-#### Analyze a Repository
-
-Start with a small repository to test:
+### Step 3: Progress Through Each Phase
 
 ```bash
-llmdev analyze anicolao/llmdev --max-commits 20 --max-prs 10 --max-issues 10
+# After completing intro, move to overview
+llmdev generate-instructions owner/repo --phase overview
+
+# Then detection
+llmdev generate-instructions owner/repo --phase detection
+
+# Continue through: story → prompts → iteration → patterns → 
+#   recommendations → synthesis
 ```
 
-This will:
-- Fetch up to 20 commits, 10 PRs, and 10 issues
-- Detect Copilot usage patterns
-- Generate a markdown report in the `output/` directory
+### Step 4: Complete Your Case Study
 
-**Note:** This approach may hit API rate limits on larger repositories. For comprehensive analysis, use the MCP instructions approach instead.
+After completing all phases (typically 2-3 hours), you'll have a comprehensive 30-50 page case study documenting:
+- Development story arc
+- Prompt patterns and effectiveness
+- Iteration strategies
+- Best practices and recommendations
 
-### View the Report
+Save your completed analysis to:
+```
+case_studies/GITHUB_OWNER_REPO.md
+```
+
+## Example: Analyzing a Real Repository
+
+Let's analyze the dikuclient repository as an example:
 
 ```bash
-# Find the generated report
-ls -lt output/
+# Phase 1: Introduction
+llmdev generate-instructions anicolao/dikuclient --phase intro
+# Follow instructions to understand the project and workflow
 
-# View it with your favorite markdown viewer or text editor
-cat output/llmdev_analysis_*.md
+# Phase 2: Repository Overview
+llmdev generate-instructions anicolao/dikuclient --phase overview
+# Gather basic statistics and metadata
+
+# Phase 3: LLM Detection
+llmdev generate-instructions anicolao/dikuclient --phase detection
+# Find Copilot mentions and usage patterns
+
+# Phase 4: Story Arc
+llmdev generate-instructions anicolao/dikuclient --phase story
+# Extract development phases and milestones
+
+# Phase 5: Prompts
+llmdev generate-instructions anicolao/dikuclient --phase prompts
+# Analyze prompt effectiveness
+
+# Phase 6: Iteration
+llmdev generate-instructions anicolao/dikuclient --phase iteration
+# Study iteration patterns
+
+# Phase 7: Patterns
+llmdev generate-instructions anicolao/dikuclient --phase patterns
+# Identify development patterns
+
+# Phase 8: Recommendations
+llmdev generate-instructions anicolao/dikuclient --phase recommendations
+# Create best practices
+
+# Phase 9: Synthesis
+llmdev generate-instructions anicolao/dikuclient --phase synthesis
+# Finalize executive summary
 ```
 
-## Example Repositories to Analyze
+Result: A comprehensive case study saved to `case_studies/GITHUB_ANICOLAO_DIKUCLIENT.md`
 
-Try analyzing these repositories (start with smaller limits):
+## Understanding the Phases
 
-```bash
-# A small project
-llmdev analyze microsoft/calculator --max-commits 50
+Each phase focuses on a specific aspect of analysis:
 
-# A medium project (be patient, this takes a few minutes)
-llmdev analyze facebook/react --max-commits 100 --max-prs 50
+| Phase | Duration | Focus |
+|-------|----------|-------|
+| **intro** | 5 min | Project background and workflow |
+| **overview** | 10-15 min | Repository statistics and metadata |
+| **detection** | 15-20 min | LLM usage patterns |
+| **story** | 20-30 min | Development timeline and phases |
+| **prompts** | 20-30 min | Prompt analysis and effectiveness |
+| **iteration** | 15-20 min | Iteration patterns and complexity |
+| **patterns** | 20-30 min | Development practices |
+| **recommendations** | 15-20 min | Best practices synthesis |
+| **synthesis** | 10-15 min | Executive summary and finalization |
 
-# Use verbose mode to see what's happening
-llmdev analyze your-org/your-repo --verbose
-```
+**Total time:** 2-3 hours for a comprehensive case study
 
-## Common Options
+## Tips for Success
 
-```bash
-# Specify output directory
-llmdev analyze owner/repo --output ./my-reports
+1. **Complete phases in order** - Each phase builds on previous work
+2. **Save your progress** - Document findings as you go
+3. **Use examples** - Reference existing case studies for format guidance
+4. **Be thorough** - The more detail you capture, the more valuable the case study
+5. **Focus on insights** - Go beyond statistics to understand "why"
 
-# Adjust analysis scope
-llmdev analyze owner/repo --max-commits 200 --max-prs 100 --max-issues 50
+## Common Questions
 
-# Get help
-llmdev --help
-llmdev analyze --help
-```
+### Do I need a GitHub token?
 
-## Troubleshooting
+No! The phased instruction approach uses MCP tools that access GitHub directly, avoiding the need for personal access tokens and rate limits.
 
-### "403 Forbidden" Error
-- Make sure your GitHub token is set correctly
-- Check that your token has the right permissions
-- Verify you're not hitting rate limits (wait a few minutes and try again)
+### How long does analysis take?
 
-### "No module named 'llmdev'" Error
-- Make sure you've activated your virtual environment
-- Run `pip install -e .` again
+- Small repositories (<50 PRs): 1-2 hours
+- Medium repositories (50-100 PRs): 2-3 hours  
+- Large repositories (100+ PRs): 3-4 hours
 
-### Analysis is Very Slow
-- Reduce the number of items to analyze with `--max-commits`, `--max-prs`, `--max-issues`
-- Large repositories with many PRs/issues can take several minutes
-- Use `--verbose` to see progress
+### What if I need to pause?
+
+You can stop at any phase boundary and resume later. Just continue with the next phase when ready.
+
+### Can I skip phases?
+
+It's not recommended - each phase contributes important insights. However, you can focus more time on phases most relevant to your goals.
 
 ## What's Next?
 
 - Read the full [README.md](README.md) for more details
-- Check out [MVP.md](MVP.md) to see the development roadmap
+- Check out [MVP.md](MVP.md) to understand the approach
+- Review existing [case studies](case_studies/) for examples
 - Review [VISION.md](VISION.md) for the project's long-term goals
 - Contribute by analyzing interesting repositories and sharing findings!
-
-## Running Tests
-
-To verify your installation:
-
-```bash
-# Install development dependencies
-pip install -e ".[dev]"
-
-# Run tests
-pytest
-
-# Run with coverage
-pytest --cov=llmdev
-```
 
 ## Getting Help
 
 If you encounter issues:
-1. Check this guide's troubleshooting section
-2. Look at the example commands above
+1. Check existing case studies for examples
+2. Review the instruction files for guidance
 3. Use the `--help` flag for command options
 4. Open an issue on GitHub with details about your problem
 
