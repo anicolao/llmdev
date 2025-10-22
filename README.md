@@ -27,9 +27,124 @@ As LLMs become increasingly integrated into software development workflows, it's
 - Document case studies of successful and unsuccessful LLM usage
 - Develop best practices and guidelines for effective LLM-augmented development
 
-## Getting Started
+## Installation
 
-This project is currently in early development. Check the [VISION.md](VISION.md) document for more details about the long-term goals and philosophy of the project.
+### From Source
+
+```bash
+# Clone the repository
+git clone https://github.com/anicolao/llmdev.git
+cd llmdev
+
+# Create a virtual environment (recommended)
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install the package
+pip install -e .
+
+# Install development dependencies (optional)
+pip install -e ".[dev]"
+```
+
+## Usage
+
+### Basic Usage
+
+Analyze a GitHub repository:
+
+```bash
+llmdev analyze owner/repo
+```
+
+For example:
+
+```bash
+llmdev analyze microsoft/vscode
+```
+
+### GitHub Token Authentication
+
+For better API rate limits and access to private repositories, provide a GitHub personal access token:
+
+```bash
+# Using environment variable (recommended)
+export GITHUB_TOKEN=your_token_here
+llmdev analyze owner/repo
+
+# Or using command-line option
+llmdev analyze owner/repo --token your_token_here
+```
+
+To create a GitHub token:
+1. Go to https://github.com/settings/tokens
+2. Click "Generate new token (classic)"
+3. Select scopes: `repo` (for private repos) or `public_repo` (for public repos only)
+4. Copy the generated token
+
+### Advanced Options
+
+```bash
+# Specify output directory
+llmdev analyze owner/repo --output ./reports
+
+# Limit analysis scope
+llmdev analyze owner/repo --max-commits 50 --max-prs 25 --max-issues 25
+
+# Enable verbose logging
+llmdev analyze owner/repo --verbose
+```
+
+### Command Help
+
+```bash
+# General help
+llmdev --help
+
+# Command-specific help
+llmdev analyze --help
+```
+
+## Output
+
+The tool generates a markdown report in the output directory with:
+
+- Repository overview and statistics
+- Analysis scope (commits, PRs, issues analyzed)
+- Copilot detection summary
+- Detailed findings with links to specific commits, PRs, and issues
+- Breakdown by source type and detection method
+
+## Detection Methods
+
+The MVP focuses on detecting explicit Copilot mentions and patterns:
+
+1. **Explicit Mentions**: Searches for keywords like "copilot", "github copilot", "co-pilot" in:
+   - Commit messages
+   - PR titles and descriptions
+   - PR comments and reviews
+   - Issue titles and descriptions
+   - Issue comments
+
+2. **Bot Attribution**: Identifies commits or contributions from Copilot-related bot accounts
+
+## Testing
+
+Run the test suite:
+
+```bash
+pytest
+```
+
+Run tests with coverage:
+
+```bash
+pytest --cov=llmdev --cov-report=html
+```
+
+## Development Status
+
+This project is in active MVP development. See [MVP.md](MVP.md) for the development roadmap and [VISION.md](VISION.md) for long-term goals.
 
 ## Contributing
 
