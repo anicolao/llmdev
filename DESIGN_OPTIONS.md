@@ -1,5 +1,15 @@
 # Design Options for LLMDev Project
 
+## ⚠️ Historical Document
+
+**Note:** This document explores early architectural options considered for the llmdev project. The actual implementation evolved differently based on real-world constraints and findings.
+
+**What was actually implemented:** The project adopted a phased instruction approach using MCP-enabled tools, documented in [MVP.md](MVP.md) and [SOLUTION_SUMMARY.md](SOLUTION_SUMMARY.md). This proved more effective than the approaches outlined here due to GitHub API rate limit constraints.
+
+This document is retained for historical reference and to understand the design evolution.
+
+---
+
 ## Overview
 
 This document explores different architectural approaches for implementing the LLMDev project, which aims to extract learnings from GitHub projects by analyzing PRs and issues where GitHub Copilot was involved, and publish these insights as a GitHub Pages resource.
