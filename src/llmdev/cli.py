@@ -18,8 +18,8 @@ def setup_logging(verbose: bool) -> None:
     level = logging.DEBUG if verbose else logging.INFO
     logging.basicConfig(
         level=level,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
     )
 
 
@@ -31,53 +31,36 @@ def cli():
 
 
 @cli.command()
-@click.argument('repository')
+@click.argument("repository")
 @click.option(
-    '--token',
-    envvar='GITHUB_TOKEN',
-    help='GitHub API token (can also use GITHUB_TOKEN env var)'
+    "--token", envvar="GITHUB_TOKEN", help="GitHub API token (can also use GITHUB_TOKEN env var)"
 )
 @click.option(
-    '--output',
-    '-o',
-    default='output',
+    "--output",
+    "-o",
+    default="output",
     type=click.Path(),
-    help='Output directory for reports (default: output/)'
+    help="Output directory for reports (default: output/)",
 )
+@click.option("--verbose", "-v", is_flag=True, help="Enable verbose logging")
 @click.option(
-    '--verbose',
-    '-v',
-    is_flag=True,
-    help='Enable verbose logging'
-)
-@click.option(
-    '--max-commits',
+    "--max-commits",
     type=int,
     default=100,
-    help='Maximum number of commits to analyze (default: 100)'
+    help="Maximum number of commits to analyze (default: 100)",
 )
 @click.option(
-    '--max-prs',
-    type=int,
-    default=50,
-    help='Maximum number of PRs to analyze (default: 50)'
+    "--max-prs", type=int, default=50, help="Maximum number of PRs to analyze (default: 50)"
 )
 @click.option(
-    '--max-issues',
-    type=int,
-    default=50,
-    help='Maximum number of issues to analyze (default: 50)'
+    "--max-issues", type=int, default=50, help="Maximum number of issues to analyze (default: 50)"
 )
 @click.option(
-    '--deep-analysis',
+    "--deep-analysis",
     is_flag=True,
-    help='Enable deep analysis with prompt extraction, iteration patterns, and categorization'
+    help="Enable deep analysis with prompt extraction, iteration patterns, and categorization",
 )
-@click.option(
-    '--no-cache',
-    is_flag=True,
-    help='Disable caching of API responses'
-)
+@click.option("--no-cache", is_flag=True, help="Disable caching of API responses")
 def analyze(
     repository: str,
     token: Optional[str],
@@ -87,40 +70,40 @@ def analyze(
     max_prs: int,
     max_issues: int,
     deep_analysis: bool,
-    no_cache: bool
+    no_cache: bool,
 ):
     """
     Analyze a GitHub repository for LLM-generated code.
-    
+
     REPOSITORY should be in the format 'owner/repo' (e.g., 'microsoft/vscode')
-    
+
     Example:
         llmdev analyze microsoft/vscode --token YOUR_TOKEN
     """
     setup_logging(verbose)
     logger = logging.getLogger(__name__)
-    
+
     logger.info(f"Starting analysis of repository: {repository}")
-    
+
     # Validate repository format
-    if '/' not in repository:
+    if "/" not in repository:
         click.echo("Error: Repository must be in format 'owner/repo'", err=True)
         sys.exit(1)
-    
-    owner, repo = repository.split('/', 1)
-    
+
+    owner, repo = repository.split("/", 1)
+
     # Check for GitHub token
     if not token:
         click.echo(
             "Warning: No GitHub token provided. API rate limits will be restrictive.\n"
             "Set GITHUB_TOKEN environment variable or use --token option.",
-            err=True
+            err=True,
         )
-    
+
     # Create output directory
     output_path = Path(output)
     output_path.mkdir(parents=True, exist_ok=True)
-    
+
     # Create configuration
     config = Config(
         github_token=token,
@@ -132,26 +115,26 @@ def analyze(
         deep_analysis=deep_analysis,
         enable_cache=not no_cache,
     )
-    
+
     try:
         # Initialize analyzer
         logger.info("Initializing repository analyzer...")
         if deep_analysis:
             logger.info("Deep analysis mode enabled - extracting prompts, patterns, and iterations")
         analyzer = RepositoryAnalyzer(config)
-        
+
         # Run analysis
         logger.info("Fetching repository data...")
         results = analyzer.analyze(owner, repo)
-        
+
         # Generate report
         logger.info("Generating report...")
         report_generator = ReportGenerator(config)
         report_path = report_generator.generate(results)
-        
+
         click.echo(f"\n✓ Analysis complete!")
         click.echo(f"✓ Report saved to: {report_path}")
-        
+
     except Exception as e:
         logger.exception("Analysis failed")
         click.echo(f"Error: {str(e)}", err=True)
@@ -163,5 +146,5 @@ def main():
     cli()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
