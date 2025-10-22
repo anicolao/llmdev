@@ -41,7 +41,7 @@ We welcome contributions! As we develop the tools and methodologies, we'll be lo
 
 ## License
 
-[LICENSE] CC0
+[LICENSE](LICENSE) CC0
 
 ## Related Resources
 
