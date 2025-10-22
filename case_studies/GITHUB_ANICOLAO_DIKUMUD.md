@@ -219,7 +219,173 @@ Oct 22, 2025     PR #168: Latest (server crashes fixed)
 - Exceptional velocity with quality (100+ passing tests)
 
 ## Prompt Analysis
-[To be completed in prompts phase]
+
+DikuMUD demonstrates **exceptional prompt transparency** - every PR preserves the original prompt in a standardized `<details><summary>Original prompt</summary>` section. This creates a complete audit trail of human intent throughout the development process.
+
+### Prompt Categories & Examples
+
+#### 1. Bug Fix Prompts (High Specificity)
+
+**PR #168 - Server Crashes:**
+> "Two mystery bugs: if you've ideas on either please suggest them or fix...  
+> 1- sometimes, when processing a tick, the server crashes. No output is visible to suggest a cause.  
+> 2- sometimes, when the user gives a command, it seems to get executed twice. For example, frequently a `rem` command says something about level restrictions..."
+
+**Analysis:** Provides specific symptoms, examples of manifestation, and observable behavior. Copilot diagnosed: (1) use-after-free in corpse decay, (2) incorrect special procedure assignment.
+
+**PR #148 - Memory Corruption:**
+> "Game server just crashed with only this for a clue at the end of the logs:  
+> `Losing player: F.`  
+> `malloc_consolidate(): invalid chunk size`"
+
+**Analysis:** Minimal context but precise error message. Copilot traced to use-after-free bugs in linked list iteration.
+
+#### 2. Feature Request Prompts (Clear Specifications)
+
+**PR #128 - WebSocket Support:**
+> "Add websocket support to the network layer. When a new connection happens, analyze the incoming content to see if it is a web browser, and if it is, 'upgrade' the socket connection to a websocket. **Make this fix as small as possible: try to affect only the initial connection from the client if possible.**"
+
+**Analysis:** Technical requirement with explicit constraint ("as small as possible"). Copilot delivered minimal changes affecting only connection handling.
+
+**PR #125 - Locate Command:**
+> "Add a 'locate' command for wizards 22+. Syntax:  
+> locate char #### find a mob  
+> locate obj #### find an object  
+> locate keywords ### find matching mobs or objects  
+> Its output should be the rooms where the located item/mob are loaded."
+
+**Analysis:** Complete specification with syntax examples and expected output. Zero ambiguity.
+
+#### 3. Content/Balance Prompts (Player Perspective)
+
+**PR #113 - Weapon Weight:**
+> "The radium rifle which can be found just outside lower helium is too heavy to use."
+
+**Analysis:** Simple problem statement from player perspective. Copilot investigated, found STR requirement too high for basic weapon, reduced weight from 20 to 15 lbs.
+
+**PR #126 - Death Penalty:**
+> "Death is too severe. Losing half of your total ever accumulated experience is just a huge setback. Instead, lose the lesser of half your experience or all your progress towards the next level. **So at most one level's worth of experience can be lost.**"
+
+**Analysis:** Problem + solution proposal with clear constraint. Copilot implemented exactly as specified.
+
+#### 4. Tooling/Infrastructure Prompts (Design Thinking)
+
+**PR #119 - Zone Validator:**
+> "Make a zone_layout_validator which walks all the rooms in a zone assigning an (x, y, z) coordinate to each. Start in any room, and walk N/S/E/W/U/D in a BFS fashion, determining the coordinate for every room ID. Complain about rooms which have the same coordinates as each other, or single rooms that would get assigned multiple coordinates if revisited..."
+
+**Analysis:** Algorithmic specification (BFS), data structure (coordinates), and error conditions defined. Copilot created production-quality validation tool.
+
+#### 5. Test/QA Prompts (Problem-Solving Focus)
+
+**PR #133 - Flaky Tests:**
+> "Integration tests:  
+> - test_quest_3007_multiple_quests.yaml  
+> - test_quest_mob_targeting.yaml  
+> are flaky due to mobs moving in and out of the test room. **Devise a fix to make these tests reliable.**"
+
+**Analysis:** Problem stated, solution approach left to Copilot. Result: Added NO_MOB flag to test rooms, preventing wandering NPCs from interfering.
+
+#### 6. Design/Planning Prompts (Phased Approach)
+
+**PR #162 - Design Document:**
+> "Follow the newly documented deep discovery design process to create an actual design for the sewers... **Focus on writing only the design doc for all this, and then we can start implementing after the design is reviewed and approved; don't implement anything yet in case changes are needed.**"
+
+**Analysis:** Explicit phase separation (design before implementation). Shows mature development process with Copilot participating in planning, not just coding.
+
+### Prompt Pattern Analysis
+
+#### Winning Formula: Problem-Context-Constraint-Success
+
+**Effective Characteristics Observed:**
+
+1. **Specific Constraints**: 
+   - "Make this fix as small as possible" (PR #128)
+   - "at most one level's worth" (PR #126)
+   - "wizards 22+" (PR #125)
+   - **Impact**: Copilot delivers surgical, minimal changes
+
+2. **Context Provided**:
+   - Game state: "My L4 Padwar (warrior) cannot hit him" (PR #112)
+   - Error messages: "malloc_consolidate(): invalid chunk size" (PR #148)
+   - Existing systems: "use existing janitors as quest givers" (PR #162)
+   - **Impact**: Copilot makes informed decisions
+
+3. **Clear Success Criteria**:
+   - "test passes" (PR #76)
+   - "commands work" (PR #125)
+   - "tests reliable" (PR #133)
+   - **Impact**: Unambiguous completion definition
+
+4. **Incremental Requests**:
+   - "design doc first, then implement" (PR #162)
+   - "test it by formatting lesser_helium.yaml" (PR #164)
+   - **Impact**: Manageable scope, iterative refinement
+
+5. **Problem-Focused** (Not Solution-Prescribed):
+   - Describes what's wrong, not how to fix it
+   - Allows Copilot to apply best practices
+   - Example: "Devise a fix" vs "Add this code"
+
+### Prompt Structure Template (Extracted)
+
+```
+[Problem Statement]
+Clear description of issue or desired feature
+
+[Context - Optional but Effective]
+- Relevant system information
+- Error messages or logs
+- User perspective/experience
+- Related systems or constraints
+
+[Constraints - Highly Recommended]
+- Size/scope limits ("as small as possible")
+- Compatibility requirements
+- Permission/access levels
+- Performance considerations
+
+[Success Criteria - Critical]
+How to know the task is complete:
+- Tests pass
+- Feature works as described
+- Problem no longer occurs
+```
+
+### Anti-Patterns (Notably Absent)
+
+What DikuMUD prompts **don't** do:
+- ❌ Prescribe implementation details unnecessarily
+- ❌ Omit context when debugging
+- ❌ Leave success criteria undefined
+- ❌ Request changes without constraints
+
+### Prompt Evolution Over Time
+
+**Early Phase (PRs #4-30):**
+- Shorter prompts
+- More exploratory ("compare shop setup to quest setup")
+- Learning the codebase
+
+**Middle Phase (PRs #31-100):**
+- More specific constraints
+- Better context provided
+- Feature requests become more detailed
+
+**Late Phase (PRs #101-168):**
+- Highly refined prompts
+- Design-before-implementation pattern emerges
+- Explicit phase separation (design, implement, test)
+- Integration with existing processes
+
+### Key Takeaway: Transparency as a Feature
+
+DikuMUD's preservation of original prompts isn't just documentation—it's a **development methodology**. The prompt history reveals:
+- How problems were discovered (player reports, crashes, tests)
+- What constraints shaped solutions (minimal changes, backward compatibility)
+- How complexity was managed (phased approach, incremental)
+- Why certain decisions were made (context in prompts)
+
+This creates a **traceable decision chain** from user need → prompt → implementation → outcome.
 
 ## Iteration Patterns
 [To be completed in iteration phase]
