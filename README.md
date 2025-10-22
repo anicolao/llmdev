@@ -93,7 +93,36 @@ llmdev analyze owner/repo --max-commits 50 --max-prs 25 --max-issues 25
 
 # Enable verbose logging
 llmdev analyze owner/repo --verbose
+
+# Enable deep analysis (MVP2 feature)
+llmdev analyze owner/repo --deep-analysis
+
+# Disable caching
+llmdev analyze owner/repo --no-cache
 ```
+
+### Deep Analysis Mode (MVP2)
+
+The `--deep-analysis` flag enables advanced analysis features:
+
+**Features:**
+- **PR Content Analysis**: Extracts prompts, problem statements, solutions, and checklists from PR descriptions
+- **Iteration Patterns**: Tracks commit sequences and identifies refinement patterns (quick wins vs complex work)
+- **Prompt Analysis**: Measures prompt specificity, context, constraints, and effectiveness
+- **Smart Categorization**: Classifies PRs by type (vision/foundation/feature/fix/refine/docs)
+- **Enhanced Reports**: Generates insights about development patterns, prompt effectiveness, and iteration statistics
+
+**Example:**
+```bash
+llmdev analyze anicolao/dikuclient --deep-analysis
+```
+
+**Deep Analysis Report Sections:**
+- PR Category Distribution
+- Iteration Patterns (average commits per PR, pattern distribution)
+- Prompt Analysis (specificity scores, characteristics)
+- Most Complex PRs (with complexity indicators)
+- Quick Wins (1-2 commit PRs)
 
 ### Command Help
 
@@ -109,11 +138,20 @@ llmdev analyze --help
 
 The tool generates a markdown report in the output directory with:
 
+### Standard Analysis
 - Repository overview and statistics
 - Analysis scope (commits, PRs, issues analyzed)
 - Copilot detection summary
 - Detailed findings with links to specific commits, PRs, and issues
 - Breakdown by source type and detection method
+
+### Deep Analysis (--deep-analysis flag)
+Additional sections when deep analysis is enabled:
+- **PR Category Distribution**: Shows how PRs are categorized (vision, foundation, feature, fix, refine, docs)
+- **Iteration Patterns**: Average commits per PR, refinement counts, and pattern distribution
+- **Prompt Analysis**: Statistics on prompt characteristics (specificity, context, constraints, examples)
+- **Most Complex PRs**: Top 5 complex PRs with indicators explaining complexity
+- **Quick Wins**: List of PRs that merged with 1-2 commits
 
 ## Detection Methods
 
@@ -144,7 +182,41 @@ pytest --cov=llmdev --cov-report=html
 
 ## Development Status
 
-This project is in active MVP development. See [MVP.md](MVP.md) for the development roadmap and [VISION.md](VISION.md) for long-term goals.
+This project is in active development. Current status:
+
+### MVP 1.0 (Complete)
+Basic detection and reporting capabilities. See [MVP.md](MVP.md) for details.
+
+### MVP 2.0 (Current)
+Enhanced analysis capabilities for case study generation:
+- ✅ Deep PR content analysis (prompts, problems, solutions)
+- ✅ Iteration pattern detection and classification
+- ✅ Prompt effectiveness analysis
+- ✅ Smart PR categorization
+- ✅ API response caching and rate limiting
+- ✅ Enhanced report generation
+
+See [MVP2.md](MVP2.md) for the complete feature specification and [VISION.md](VISION.md) for long-term goals.
+
+### Key Features Added in MVP 2.0
+
+**Analyzers Module**:
+- `PRAnalyzer`: Extracts structured content from PR descriptions
+- `IterationAnalyzer`: Classifies development patterns (quick wins, normal, complex)
+- `PromptAnalyzer`: Measures prompt quality and effectiveness
+
+**Caching Infrastructure**:
+- `DiskCache`: TTL-based caching for API responses
+- `RateLimiter`: Intelligent rate limit management with exponential backoff
+
+**Usage Example**:
+```bash
+# Basic analysis (MVP 1.0)
+llmdev analyze owner/repo
+
+# Deep analysis with caching (MVP 2.0)
+llmdev analyze owner/repo --deep-analysis
+```
 
 ## Contributing
 
