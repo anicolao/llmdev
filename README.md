@@ -1,4 +1,4 @@
-# llmdev
+# LLM Dev
 
 A toolkit for analyzing and understanding how Large Language Models (LLMs) like GitHub Copilot are used to build real-world systems.
 
@@ -41,7 +41,7 @@ We welcome contributions! As we develop the tools and methodologies, we'll be lo
 
 ## License
 
-TBD
+[LICENSE] CC0
 
 ## Related Resources
 
