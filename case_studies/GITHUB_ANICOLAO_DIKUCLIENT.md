@@ -859,138 +859,413 @@ With 63 PRs in 18 days, quality could have degraded. It didn't.
 
 ---
 
-## What Could Be Improved
+## Challenges and Learning Opportunities
 
-### 1. **Limited Test Coverage Visibility**
+### 1. **The Foundation Challenge (PR #3)**
 
-**Observation:** While there's evidence of test writing, the analysis didn't reveal:
-- Overall test coverage percentage
-- Continuous integration setup
-- Automated testing on PRs
+**Challenge:** First implementation discovered numerous edge cases
 
-**Recommendation:** 
-- Add CI/CD pipeline (GitHub Actions)
-- Display test coverage badges
-- Require tests for new features
-- Run tests automatically on PRs
+**Issues Encountered:**
+- Telnet IAC sequence handling
+- ANSI color vs TUI styling conflicts
+- Password echo timing
+- Prompt detection heuristics
+- UTF-8 boundaries
+- Line ending normalization
 
-### 2. **Merge Commit Noise**
+**Iterations:** 15+ commits based on checklist
 
-**Observation:** Many merge commits in recent history:
-```
-"Merge pull request #63 from anicolao/copilot/..."
-"Merge pull request #62 from anicolao/copilot/..."
-```
+**Why Difficult:** First implementation always reveals "unknown unknowns"
 
-**Recommendation:**
-- Consider using "Squash and merge" for feature PRs
-- Keeps main branch history cleaner
-- Easier to understand project evolution
-- Simpler git bisect for debugging
+**What Worked:** Systematic checklist-driven approach, willingness to iterate
 
-### 3. **Issue Tracking Underutilized**
+**Learning:** Budget 3-5x more time for foundational work. Don't expect first implementation to be perfect.
 
-**Observation:** Only 3 issues found vs. 63+ PRs
-- Most work appears to happen directly in PRs
-- Limited planning or feature request tracking
+### 2. **Security Iteration (PRs #37-38)**
 
-**Recommendation:**
-- Open issues before creating PRs
-- Use issues for feature planning
-- Track bugs and feature requests
-- Reference issues in PR descriptions
-- Creates better documentation of "why"
+**Challenge:** Getting password handling right
 
-### 4. **No Apparent Code Review Process**
+**PR #37:** Don't persist passwords in history
+**PR #38:** Complete password architecture overhaul
 
-**Observation:** 
-- Single developer (anicolao) appears to be merging all Copilot PRs
-- Quick merge times suggest limited review
-- No evidence of other reviewers
+**Why Complex:** Security requires getting details right. Edge cases have serious consequences.
 
-**Recommendation:**
-- Even for personal projects, consider:
-  - Self-review checklist
-  - Wait time before merging (24 hours)
-  - Manual testing of changes
-  - Security review for sensitive code
+**Iterations:** Multiple commits, extensive testing
 
-### 5. **Lack of Contribution Guidelines**
+**What Worked:** Willingness to do complete rewrites when needed
 
-**Observation:** No `CONTRIBUTING.md` or developer guide visible
+**Learning:** Security features warrant extra iteration. Don't rush them.
 
-**Recommendation:**
-- Document development workflow
-- Explain how to use Copilot in this project
-- Set expectations for PRs
-- Add code style guidelines
-- Include testing requirements
+### 3. **Cross-Platform Portability (PR #49)**
+
+**Issue:** "Fix Windows build failure caused by Unix-specific syscall.Mkfifo"
+
+**Root Cause:** Platform-specific assumptions in code
+
+**Discovery:** Only found through Windows testing
+
+**Fix:** Platform-specific build constraints
+
+**Learning:** Cross-platform support needs explicit testing. Copilot may default to Unix patterns.
+
+**Recommendation:** Test on all target platforms early and often.
+
+### 4. **Integration Complexity (PR #16)**
+
+**Challenge:** "WebSocket connection fails behind nginx reverse proxy with SSL"
+
+**Why Hard:**
+- Multiple systems (app, nginx, SSL, WebSocket)
+- Each with different behaviors
+- Difficult to reproduce locally
+- Required understanding all layers
+
+**Pattern:** Integration bugs are inherently complex
+
+**Learning:** Multi-system integration requires patient debugging. May need multiple PRs to fully resolve.
+
+### 5. **Test Flakiness (PR #43)**
+
+**Issue:** "Fix flaky test in TestVisualMapRender by removing external file dependency"
+
+**Root Cause:** External file dependency caused non-deterministic behavior
+
+**Impact:** Undermines confidence in test suite
+
+**Fix:** Remove external dependencies, make tests self-contained
+
+**Learning:** Flaky tests should be fixed immediately. They erode trust in automation.
+
+**Pattern Recognition:** External dependencies = potential flakiness
+
+### 6. **Scope Creep Risk**
+
+**Observed:** Feature list grew substantially
+- Started: Basic MUD client
+- Ended: Mobile apps, MUD-specific optimizations, sophisticated UX
+
+**Positive:** Shows ambition and capability
+
+**Risk:** Could have lost focus or overextended
+
+**What Prevented Scope Creep:**
+- Clear foundation first
+- Iterative approach
+- Each feature self-contained
+- Willingness to mark things [WIP]
+
+**Learning:** Rapid iteration with AI can enable ambitious scope IF foundation is solid and features are independent.
+
+### 7. **Limited Multi-Developer Testing**
+
+**Context:** Single developer (anicolao) throughout
+
+**Advantages:**
+- Fast decisions
+- No coordination overhead
+- Consistent style
+- Clear vision
+
+**Missing:**
+- Diverse perspectives
+- Code review discussions
+- Different use case discovery
+- Knowledge sharing
+
+**Impact:** Some patterns might not scale to teams
+
+**Learning:** Single-developer patterns may need adaptation for team collaboration.
+
+### 8. **Documentation Lag**
+
+**Observation:** PR #48 updated README to "reflect current state"
+
+**Implication:** Documentation fell behind implementation
+
+**Why It Happened:** Features developed faster than docs
+
+**Mitigation:** Periodic consolidation PRs (like #48) caught up
+
+**Better Approach:** Update docs in same PR as feature (when possible)
+
+**Learning:** Fast development can outpace documentation. Build in catch-up periods.
+
+### 9. **Test Coverage Gaps**
+
+**Evidence:** Some bugs found in production use, not tests
+
+**Examples:**
+- Flaky tests (PR #43)
+- Trigger execution bugs (PR #62)
+- Layout precision issues (PRs #40-41)
+
+**Why:** Tests written after features, not before
+
+**Impact:** Some issues reached users
+
+**Improvement:** More TDD would catch issues earlier
+
+**Learning:** Even with AI-generated code, comprehensive testing matters.
+
+### 10. **Prompt Vagueness in Early Iterations**
+
+**Observation:** Some PRs required more iteration than necessary
+
+**Example Pattern:**
+- Vague prompt → Copilot guesses → Human corrects → Copilot adjusts
+
+**More Efficient:**
+- Specific prompt → Copilot implements → Human approves
+
+**Evidence:** Compare PR #3 (vague: "implement client") vs PR #45 (specific: "add go run instructions")
+
+**Learning:** Specificity pays dividends. Extra 5 minutes crafting prompt saves hours of iteration.
 
 ---
 
-## Best Practices Identified
+## Best Practices Extracted from dikuclient
 
-### 1. **Transparent LLM Usage**
+These practices emerged consistently throughout the project's 63 PRs and can be applied by others:
 
-✅ **Practice:** Clear indication of Copilot involvement through:
-- Branch names (`copilot/*`)
-- Bot author attribution
-- PR descriptions and comments
-- Issue labels
+### 1. **Start with Design, Especially for Complex Projects**
 
-✅ **Benefit:** 
-- Builds trust
-- Enables quality analysis
-- Facilitates learning
-- Supports reproducibility
+**The Pattern:**
+```
+Issue #1: Vision prompt → PR #2: Design document → PRs #3-63: Implementation
+```
 
-### 2. **Incremental, Focused Changes**
+**How to Apply:**
+1. Before writing code, write a design document
+2. Request Copilot to create architecture spec
+3. Include language/framework justification
+4. Specify all major components
+5. Get human approval before implementation
 
-✅ **Practice:** Each PR addresses a specific, well-defined problem
+**Example Prompt:**
+```
+Create a design document for [project]. Include:
+- Language/framework choice with justification
+- Overall architecture
+- Key components and their interactions
+- Technology stack decisions
+- Development phases
 
-✅ **Benefit:**
-- Easier to review
-- Simpler to debug
-- Lower risk of breaking changes
-- Clearer git history
+Do NOT write any code yet.
+```
 
-### 3. **Iterative Refinement**
+**Why Effective:** Copilot implements specs better than vague ideas. Design phase forces clarity.
 
-✅ **Practice:** Multiple commits within PRs showing progression:
-- Initial plan
-- Implementation
-- Fixes based on feedback
-- Final refinement
+**When to Use:** Any non-trivial project (>5 PRs expected)
 
-✅ **Benefit:**
-- Shows thought process
-- Allows course correction
-- Demonstrates learning
-- Improves final quality
+### 2. **Craft Specific, Contextual Prompts**
 
-### 4. **Human-in-the-Loop**
+**Bad Prompt:**
+"Fix the layout"
 
-✅ **Practice:** Human developer (anicolao) reviews and merges all Copilot PRs
+**Good Prompt (from PR #40):**
+"Fix main panel height mismatch with sidebar due to integer division rounding"
 
-✅ **Benefit:**
-- Quality gate
-- Domain expertise application
-- Catch LLM mistakes
+**Best Prompt Pattern:**
+```
+## Problem
+[Specific issue with concrete example]
+
+## Context
+[Why it matters, what it affects]
+
+## Desired Outcome
+[What success looks like]
+
+## Constraints
+[Any limitations or requirements]
+```
+
+**Example from dikuclient (PR #54):**
+```
+## Problem
+In the Barsoom universe, many rooms have identical characteristics
+(same title, first description line, and exits), causing the mapping
+code to incorrectly treat distinct physical rooms as the same room.
+
+[Context explains the impact on users]
+
+[Suggests distance-based disambiguation approach]
+```
+
+**Result:** 3 commits, merged in <8 hours
+
+**Learning:** Specificity reduces iteration. 5 minutes crafting prompt saves hours of back-and-forth.
+
+### 3. **Use Checklists to Track Complex Work**
+
+**Pattern from PRs:**
+```markdown
+- [x] Explore repository and understand current implementation
+- [x] Run existing tests to establish baseline
+- [x] Identify all files needing changes
+- [x] Implement feature
+- [x] Add tests for new functionality
+- [x] Run full test suite
+- [x] Update documentation
+```
+
+**Benefits:**
+- Breaks work into verifiable steps
+- Shows progress to stakeholders
+- Enables resume after interruptions
+- Creates audit trail
+- Helps Copilot stay organized
+
+**How to Apply:** Include checklist in PR description for multi-step work
+
+### 4. **Mark Exploratory Work as [WIP]**
+
+**Examples from dikuclient:**
+- "[WIP] The password bullets we are using somehow mess with..."
+- "[WIP] Fix trigger execution issues"
+- "[WIP] Collapse account name and username"
+
+**When to Use [WIP]:**
+- Exploring different approaches
+- Requirements unclear
+- Multiple iterations expected
+- Not production-ready
+
+**Benefits:**
+- Sets appropriate expectations
+- Enables early feedback
+- Documents that iteration is normal
+- Reduces pressure for perfection
+
+**Pattern:** [WIP] → iterations → clean title → merge
+
+### 5. **Do Periodic Consolidation PRs**
+
+**Examples:**
+- PR #15: "Verify and document barebones implementation" (tests + docs)
+- PR #48: "Update README to reflect current state"
+- PR #43: "Fix flaky test"
+
+**Timing:** Every 10-15 feature PRs
+
+**What to Include:**
+- Add tests for existing features
+- Update documentation
+- Fix flaky tests
+- Pay down technical debt
+- Refactor as needed
+
+**Why Critical:** Prevents debt accumulation, maintains confidence, creates stable baselines
+
+**Warning:** Without consolidation, velocity eventually collapses under debt weight
+
+### 6. **Plan for Refinement After Major Features**
+
+**Observed Pattern:**
+```
+Major Feature PR → Fix PR → Fix PR → Polish PR
+```
+
+**Example:**
+- PR #3: Barebones client (foundation)
+- PR #6: Fix telnet/UTF-8 boundaries
+- PR #7: Fix session management
+- PR #8: Fix viewport sizing
+```
+
+**Why:** First implementation can't anticipate all edge cases
+
+**How to Plan:**
+- Budget 2-3 follow-up PRs after major features
+- Don't consider feature "done" until refinements complete
+- Use issue tracker to capture refinement needs
+
+**Anti-Pattern:** Moving to next feature before current one stable
+
+### 7. **Use Problem-First PR Titles**
+
+**Good Examples:**
+- "Fix screen refresh issue causing viewport jumps during typing"
+- "Fix Windows build failure caused by Unix-specific syscall"
+- "Fix main panel height mismatch due to integer division rounding"
+
+**Bad Pattern (not seen in dikuclient):**
+- "Update app.go"
+- "Fix bug"
+- "Changes"
+
+**Why Important:**
+- Makes git history searchable
+- Documents reasoning
+- Helps future debugging
+- Shows what problem was solved
+
+**Formula:** `[Action] [Component] [Problem] caused by [Root Cause]`
+
+### 8. **Iterate Quickly in Public**
+
+**Culture Observed:** Don't wait for perfection
+
+**Evidence:**
+- 3.5 PRs/day average
+- Most PRs merged same day
+- [WIP] PRs showing work in progress
+- Quick fix cycles
+
+**Philosophy:** "Good enough to iterate" > "Perfect before sharing"
+
+**Benefits:**
+- Fast feedback loops
+- Continuous progress
+- Learn through iteration
+- Build momentum
+
+**How to Enable:**
+- Good test coverage (enables confident changes)
+- Single reviewer (reduces coordination)
+- Clear acceptance criteria (know when "good enough")
+
+### 9. **Maintain Consistent Patterns Throughout**
+
+**Established Early (PRs #2-3), Maintained Through PR #63:**
+- `copilot/` branch naming
+- Problem-first PR titles
+- Checklists for complex work
+- [WIP] markers
+- Design-before-implement for complexity
+
+**Why Remarkable:** With 63 PRs, patterns could have degraded. They didn't.
+
+**How Achieved:** Discipline and precedent
+
+**Learning:** Early standards create sustainable habits
+
+**Recommendation:** Establish patterns in first 3-5 PRs, then maintain rigorously
+
+### 10. **Keep Human Strategically in the Loop**
+
+**Pattern:** Copilot implements, human guides and reviews
+
+**Human Responsibilities:**
+- Craft clear prompts
+- Review for correctness
+- Provide domain knowledge
+- Catch edge cases
 - Maintain architectural vision
+- Give feedback for iteration
 
-### 5. **Descriptive Naming**
+**Copilot Responsibilities:**
+- Generate implementation
+- Handle boilerplate
+- Follow patterns
+- Iterate based on feedback
+- Execute tedious tasks
 
-✅ **Practice:** Clear, descriptive names for:
-- Branches
-- PRs
-- Commits
-- Functions and variables (inferred from context)
+**Evidence:** PR #63 shows human correcting Copilot's approach
 
-✅ **Benefit:**
-- Self-documenting code
-- Easier navigation
-- Better comprehension
-- Reduced cognitive load
+**Balance:** Let Copilot accelerate, but human must steer
+
+**Anti-Pattern:** Full automation without human review
 
 ---
 
