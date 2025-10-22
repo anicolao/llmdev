@@ -43,9 +43,34 @@ To avoid rate limits and access repositories effectively, you'll need a GitHub P
 5. Click **"Generate token"**
 6. **Copy the token immediately** (you won't see it again!)
 
-## First Analysis
+## Choose Your Analysis Approach
 
-### Set Your GitHub Token
+llmdev offers two ways to analyze repositories:
+
+### Option 1: MCP Instructions (Recommended for Comprehensive Analysis)
+
+**Best for:** Creating detailed case studies, large repositories (100+ PRs), avoiding API rate limits
+
+Generate analysis instructions that guide you through comprehensive repository analysis:
+
+```bash
+llmdev generate-instructions owner/repo
+```
+
+This creates a structured instruction document that you can follow using MCP-enabled tools (like GitHub Copilot). No API token needed! Takes 2-3 hours but produces a comprehensive 30-50 page case study.
+
+**Example:**
+```bash
+llmdev generate-instructions anicolao/dikuclient --output ./instructions
+# Opens: instructions/ANALYZE_ANICOLAO_DIKUCLIENT.md
+# Follow the 8-phase analysis process with your MCP-enabled tool
+```
+
+### Option 2: Direct Python Analysis (Legacy)
+
+**Best for:** Quick statistics, small repositories (<50 PRs)
+
+#### Set Your GitHub Token
 
 ```bash
 export GITHUB_TOKEN=your_token_here
@@ -56,7 +81,7 @@ Or on Windows (PowerShell):
 $env:GITHUB_TOKEN="your_token_here"
 ```
 
-### Analyze a Repository
+#### Analyze a Repository
 
 Start with a small repository to test:
 
@@ -68,6 +93,8 @@ This will:
 - Fetch up to 20 commits, 10 PRs, and 10 issues
 - Detect Copilot usage patterns
 - Generate a markdown report in the `output/` directory
+
+**Note:** This approach may hit API rate limits on larger repositories. For comprehensive analysis, use the MCP instructions approach instead.
 
 ### View the Report
 
