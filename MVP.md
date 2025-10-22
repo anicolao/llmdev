@@ -2,315 +2,287 @@
 
 ## Overview
 
-The MVP for `llmdev` implements a **monolithic pipeline approach** - a single, unified pipeline that handles the complete workflow from repository ingestion through analysis and reporting. This approach prioritizes getting a working end-to-end system running quickly, allowing us to validate our assumptions and gather real insights before potentially modularizing later.
+The MVP for `llmdev` implements a **phased instruction approach** - generating structured analysis instructions that guide MCP-enabled tools (like GitHub Copilot) through comprehensive repository analysis. This approach completely avoids GitHub API rate limits while producing high-quality case studies.
 
-**Focus**: The MVP specifically targets **GitHub Copilot-generated code** detection, analyzing commits, pull requests, and issues to identify Copilot usage patterns.
+**Focus**: The MVP specifically targets analyzing **GitHub Copilot-generated code** in repositories, extracting development stories, prompts, iteration patterns, and actionable insights.
 
-## Monolithic Pipeline Architecture
+## ⚠️ Historical Note: Original Approach Failed
 
-The MVP pipeline will be a single, linear workflow:
+**What was tried:** A REST API-based monolithic pipeline that directly called GitHub APIs to fetch and analyze repository data.
+
+**Why it failed:** GitHub API rate limits (60 requests/hour unauthenticated, 5000/hour authenticated) are insufficient for analyzing real repositories. Even small repositories with 30-50 PRs would immediately hit rate limits.
+
+**Evidence:** Attempts to analyze the diku repository (30 issues) failed immediately with rate limit errors, requiring manual analysis.
+
+**Lesson learned:** Direct API consumption doesn't scale for comprehensive repository analysis. A different approach was needed.
+
+## Current Approach: Phased Instruction Generation
+
+The current MVP generates phase-by-phase instructions that work with MCP-enabled tools:
 
 ```
-GitHub Repository → GitHub API Data Collection → Analyze Commits/PRs/Issues → Detect Copilot Code → Generate Report
+llmdev generate-instructions → Phase Instructions → MCP Tool Analysis → Case Study Document
 ```
 
-All components will be implemented in a single codebase with a unified command-line interface, making it easy to run, debug, and iterate on.
+This approach uses the MCP GitHub server, which has different rate limit characteristics and enables comprehensive analysis of repositories of any size.
 
 ## Core Objectives
 
-1. **Repository Ingestion**: Use GitHub API to access repository metadata, commits, PRs, and issues
-2. **Multi-Source Analysis**: Parse git history, PR conversations, and issue discussions
-3. **Copilot Detection**: Identify code likely written with GitHub Copilot assistance using heuristics
-4. **Basic Reporting**: Generate a simple report of findings across all analyzed sources
+1. **Instruction Generation**: Create phase-by-phase analysis instructions for MCP tools
+2. **Multi-Source Analysis**: Guide analysis of commits, PRs, and issues through structured phases
+3. **Pattern Extraction**: Help identify development patterns, prompts, and iteration strategies
+4. **Case Study Creation**: Enable creation of comprehensive case studies through guided analysis
 
 ## Success Criteria
 
 The MVP is considered successful when it can:
 
-- ✅ Access a public GitHub repository via the GitHub API
-- ✅ Parse git commit history, PR conversations, and issue discussions
-- ✅ Identify at least one type of Copilot-generated code pattern
-- ✅ Detect Copilot mentions in PRs and issues
-- ✅ Generate a basic markdown report with findings from all sources
-- ✅ Run end-to-end on at least 3 real-world repositories
-- ✅ Complete analysis of a small repository (< 100 commits, 50 PRs/issues) in under 5 minutes
+- ✅ Generate structured analysis instructions for any public GitHub repository
+- ✅ Break analysis into manageable phases to avoid overwhelming context windows
+- ✅ Guide MCP tools through comprehensive repository analysis
+- ✅ Extract development story arcs, prompts, and iteration patterns
+- ✅ Enable creation of 30-50 page case studies in 2-3 hours
+- ✅ Work without hitting API rate limits (proven on repositories with 900+ commits, 180+ PRs)
+- ✅ Produce consistent, high-quality output following case study format
 
-## Initial Development Tasks
+## Phased Analysis Process
 
-### Phase 1: Project Setup (Week 1)
+The MVP breaks analysis into 8 phases:
 
-#### Task 1.1: Repository Structure
-- [ ] Create basic Python project structure
-- [ ] Set up `pyproject.toml` or `setup.py` for dependencies
-- [ ] Create `.gitignore` for Python projects
-- [ ] Set up virtual environment
+### Phase 1: Introduction and Setup
+- Project background and goals
+- Case study format overview
+- Workflow guidance
 
-**Dependencies to include:**
-- PyGithub or ghapi (for GitHub API access)
-- GitPython (for repository operations)
-- Click or argparse (for CLI)
-- pytest (for testing)
-- requests (for API calls)
+### Phase 2: Repository Overview
+- Basic repository statistics
+- Star/fork counts, creation dates
+- Language and technology stack
+- Initial impressions
 
-#### Task 1.2: CLI Framework
-- [ ] Create main entry point (`llmdev.py` or `main.py`)
-- [ ] Implement basic command structure: `llmdev analyze <owner/repo>`
-- [ ] Add `--help` documentation
-- [ ] Add verbose logging option
-- [ ] Add GitHub token authentication support
+### Phase 3: LLM Usage Detection
+- Identify Copilot mentions in commits, PRs, issues
+- Look for bot accounts and automated commits
+- Gather evidence of LLM-assisted development
 
-#### Task 1.3: Configuration
-- [ ] Create configuration system for pipeline settings
-- [ ] Define output directory structure
-- [ ] Set up logging configuration
-- [ ] Configure GitHub API rate limiting handling
+### Phase 4: Development Story Arc
+- Trace project evolution from first commit to latest
+- Identify major phases and milestones
+- Document how prompts drove development
 
-**Deliverable:** A runnable CLI that accepts a repository identifier and prints "Analysis started"
+### Phase 5: Prompt Analysis
+- Extract actual prompts from PR descriptions and issues
+- Categorize prompt types (vision, feature, fix, refine)
+- Identify what makes effective prompts
 
----
+### Phase 6: Iteration Pattern Analysis
+- Count commits per PR as iteration indicator
+- Classify: quick wins (1-2 commits) vs complex work (6+ commits)
+- Understand what caused high/low iteration counts
 
-### Phase 2: GitHub API Integration (Week 1-2)
+### Phase 7: Development Pattern Identification
+- Document development practices observed
+- Identify successful patterns to replicate
+- Note anti-patterns to avoid
 
-#### Task 2.1: GitHub API Setup
-- [ ] Implement GitHub API client initialization
-- [ ] Handle authentication (tokens, rate limiting)
-- [ ] Create error handling for API failures
-- [ ] Add retry logic for transient failures
+### Phase 8: Synthesis and Recommendations
+- Create executive summary
+- Provide actionable recommendations
+- Finalize case study document
 
-#### Task 2.2: Repository Data Collection
-- [ ] Fetch repository metadata via API
-- [ ] Retrieve commit history (limited to recent or paginated)
-- [ ] Clone repository for code analysis (optional, as needed)
-- [ ] Handle private vs public repository access
+## Implementation Details
 
-#### Task 2.3: Pull Request Data Collection
-- [ ] Fetch all PRs (or recent N PRs) from repository
-- [ ] Extract PR metadata (title, description, author, dates)
-- [ ] Retrieve PR comments and review comments
-- [ ] Parse PR conversation threads
+### Command-Line Interface
 
-#### Task 2.4: Issue Data Collection
-- [ ] Fetch all issues (or recent N issues) from repository
-- [ ] Extract issue metadata (title, description, author, dates)
-- [ ] Retrieve issue comments
-- [ ] Parse issue conversation threads
+The MVP provides a simple CLI:
 
-**Deliverable:** Successfully fetch and store commits, PRs, and issues from 3 different repositories
+```bash
+# Generate instructions for a specific phase
+llmdev generate-instructions owner/repo --phase intro
 
----
+# Phases progress through: intro → overview → detection → story → 
+#   prompts → iteration → patterns → recommendations → synthesis
+```
 
-### Phase 3: Multi-Source Analysis (Week 2-3)
+### Instruction Generation
 
-#### Task 3.1: Commit Analysis
-- [ ] Parse commit history from API or git
-- [ ] Extract commit metadata (hash, author, date, message)
-- [ ] Parse commit diffs for code changes
-- [ ] Handle merge commits appropriately
+Each phase generates a focused instruction document containing:
+- **Context**: Background on what this phase accomplishes
+- **Tasks**: Specific steps to perform
+- **Expected Output**: What to document and where
+- **Time Estimate**: How long the phase typically takes
+- **Next Steps**: How to proceed to the next phase
 
-#### Task 3.2: PR Conversation Analysis
-- [ ] Parse PR descriptions for Copilot mentions
-- [ ] Analyze PR comments for Copilot references
-- [ ] Extract code snippets from PR discussions
-- [ ] Track PR review comments
+### Example Usage
 
-#### Task 3.3: Issue Discussion Analysis
-- [ ] Parse issue descriptions for Copilot mentions
-- [ ] Analyze issue comments for Copilot references
-- [ ] Identify code snippets in issues
-- [ ] Track issue resolution patterns
+```bash
+# Start analysis
+llmdev generate-instructions anicolao/dikuclient --phase intro
+# Follow instructions in generated file
 
-#### Task 3.4: Data Aggregation
-- [ ] Create unified data structure for all sources
-- [ ] Link PRs to commits
-- [ ] Cross-reference issues with PRs/commits
-- [ ] Prepare aggregated data for detection phase
+# Continue to next phase
+llmdev generate-instructions anicolao/dikuclient --phase overview
+# Follow instructions, then continue
 
-**Deliverable:** Parse and aggregate data from commits, PRs, and issues for a repository
+# Repeat for each phase until synthesis (final phase)
+```
 
----
-
-### Phase 4: Copilot Detection (Week 3-4)
-
-#### Task 4.1: Explicit Copilot Mentions
-Implement detection for direct Copilot references:
-
-- [ ] **Commit Message Detection**: Look for keywords like "copilot", "github copilot", "co-pilot"
-- [ ] **PR/Issue Detection**: Search descriptions and comments for Copilot mentions
-- [ ] **Author Attribution**: Identify commits/PRs authored by copilot bots or with Copilot tags
-
-#### Task 4.2: Copilot Code Pattern Analysis
-- [ ] Detect common Copilot code signatures in commits:
-  - Characteristic comment styles (e.g., detailed inline explanations)
-  - Common placeholder patterns
-  - Typical function/variable naming conventions
-- [ ] Analyze code changes in PRs for Copilot patterns
-- [ ] Calculate confidence scores (0-1) for each detection
-
-#### Task 4.3: Conversation Pattern Analysis
-- [ ] Identify discussions about Copilot usage in PRs
-- [ ] Track issue reports related to Copilot-generated code
-- [ ] Analyze feedback patterns on Copilot contributions
-- [ ] Correlate code patterns with conversation mentions
-
-#### Task 4.4: Author and Contributor Analysis
-- [ ] Track commits per author with Copilot indicators
-- [ ] Identify authors who explicitly mention using Copilot
-- [ ] Correlate detection patterns with specific contributors
-- [ ] Build author profiles for Copilot usage
-
-**Deliverable:** Run detection on 3 repositories and identify Copilot usage across commits, PRs, and issues
-
----
-
-### Phase 5: Report Generation (Week 4)
-
-#### Task 5.1: Basic Statistics
-Generate a markdown report including:
-- [ ] Repository overview (name, commits/PRs/issues analyzed, date range)
-- [ ] Total Copilot-detected instances across all sources (count and percentage)
-- [ ] Breakdown by detection source (commits, PRs, issues)
-- [ ] Breakdown by detection heuristic
-- [ ] Top files with Copilot-detected changes
-
-#### Task 5.2: Detailed Findings
-- [ ] List top 10 Copilot-detected commits with evidence
-- [ ] Highlight significant PRs mentioning Copilot
-- [ ] Show issues discussing Copilot-generated code
-- [ ] Show code snippets for high-confidence detections
-- [ ] Include links to commits, PRs, and issues on GitHub
-
-#### Task 5.3: Cross-Source Analysis
-- [ ] Correlate Copilot usage across commits and PRs
-- [ ] Identify patterns in issue reports about Copilot code
-- [ ] Show timeline of Copilot adoption in the repository
-- [ ] Create simple ASCII/text charts showing:
-  - Timeline of Copilot usage across sources
-  - Distribution by source type (commits, PRs, issues)
-  - Author distribution
-
-**Deliverable:** Generate complete HTML/Markdown report with multi-source analysis for test repositories
-
----
-
-### Phase 6: Testing & Validation (Week 4-5)
-
-#### Task 6.1: Unit Tests
-- [ ] Test GitHub API client with various inputs
-- [ ] Test commit parsing edge cases
-- [ ] Test PR and issue data extraction
-- [ ] Test Copilot detection heuristics with known examples
-- [ ] Test report generation
-
-#### Task 6.2: Integration Tests
-- [ ] Run end-to-end on 5 diverse repositories
-- [ ] Validate output quality manually
-- [ ] Test error handling (API failures, rate limits, missing data)
-- [ ] Performance testing (time and memory)
-- [ ] Test with repositories of varying sizes
-
-#### Task 6.3: Documentation
-- [ ] Update README with installation instructions
-- [ ] Add usage examples with GitHub token setup
-- [ ] Document Copilot detection heuristics and rationale
-- [ ] Document GitHub API usage and rate limits
-- [ ] Create troubleshooting guide
-
-**Deliverable:** 80%+ test coverage, successful analysis of 5 repositories with multi-source data
-
----
-
-## MVP Scope Boundaries
+## MVP Scope
 
 ### In Scope ✅
-- Public GitHub repositories only
-- GitHub API for accessing commits, PRs, and issues
-- Copilot-specific detection using heuristics
+- Public GitHub repositories
+- Phased instruction generation for MCP-enabled tools
+- Copilot-specific analysis patterns
 - Multi-source analysis (commits, PR conversations, issue discussions)
-- Command-line interface
-- Single-machine execution
-- Markdown/HTML reports
+- Case study format documentation
+- Development pattern extraction
 
 ### Out of Scope ❌
-- Private repository support without tokens
-- General LLM detection (focus is Copilot-specific)
-- Machine learning-based detection (too complex for MVP)
-- Database storage (use file-based storage)
-- Web UI (CLI only)
+- Private repository direct analysis (use MCP tools with appropriate access)
+- General LLM detection beyond Copilot
+- Machine learning-based detection
+- Direct GitHub API consumption for large-scale analysis
+- Web UI
 - Real-time analysis
-- Multi-repository comparison
-- Deep code analysis beyond pattern matching
+- Automated report generation (human analyst follows instructions)
 
-## Technical Decisions
+## Why This Approach Works
 
-### Why Monolithic?
-1. **Faster Development**: Single codebase is easier to set up and modify
-2. **Simpler Debugging**: All code runs in one process
-3. **Easier Testing**: No need for inter-service testing
-4. **Rapid Iteration**: Changes don't require coordinating multiple components
-5. **Validation First**: Proves the concept before architectural complexity
-6. **Unified API Access**: Single GitHub API client handles all data sources
+### Advantages Over Direct API Approach
+
+1. **No Rate Limits**: MCP GitHub server has different access patterns
+2. **Scalable**: Works on repositories with hundreds of PRs/issues
+3. **High Quality**: Human analyst provides context and insight
+4. **Proven**: Successfully used to create comprehensive case studies (dikuclient, DikuMUD)
+5. **Time Efficient**: 2-3 hours produces 30-50 page case study
+
+### Why Phased Instructions?
+
+1. **Manageable Context**: Each phase fits within LLM context windows
+2. **Structured Output**: Ensures comprehensive, consistent analysis
+3. **Iterative Progress**: Can pause and resume at phase boundaries
+4. **Quality Control**: Review each phase before proceeding
+5. **Reusable Patterns**: Instructions codify best practices
+
+## Technical Architecture
+
+### Components
+
+1. **Instruction Generator** (`mcp_instructions.py`)
+   - Creates phase-specific instruction documents
+   - Templates for each analysis phase
+   - Guidance on next steps
+
+2. **CLI** (`cli.py`)
+   - Command-line interface for generating instructions
+   - Phase progression management
+   - Help and documentation
+
+3. **Case Study Format**
+   - Standardized template structure
+   - Consistent sections across case studies
+   - Actionable recommendations format
+
+### Data Flow
+
+```
+User → llmdev generate-instructions → Instruction File → 
+MCP Tool reads instructions → Analyzes GitHub repo → 
+Creates case study content → User saves to case_studies/
+```
+
+### Legacy Components (Deprecated)
+
+The following components exist but are deprecated due to API rate limit issues:
+- `analyzer.py` - Direct GitHub API analysis (hits rate limits)
+- `github_client.py` - REST API client (insufficient for large repos)
+- `detector.py` - Copilot detection (now done via MCP tool)
+- `reporter.py` - Automated report generation (manual process preferred)
+
+These components may be useful for small repositories or specific use cases but are not recommended for primary workflow.
 
 ### Why Focus on Copilot?
 1. **Clear Scope**: Starting with one specific LLM tool reduces complexity
 2. **Easier Detection**: Copilot has distinctive patterns and explicit mentions
-3. **GitHub Integration**: Natural fit with GitHub API and repository data
-4. **Validation Data**: Can verify detection against known Copilot usage
+3. **GitHub Integration**: Natural fit with GitHub repositories
+4. **Validation Data**: Can verify analysis against known Copilot usage
 5. **Extensible**: Learnings can be applied to other LLM tools later
 
-### Future Migration Path
-Once MVP is validated, we can:
-- Extract detection logic into pluggable modules
-- Add support for other LLM tools (ChatGPT, Claude, etc.)
-- Separate storage layer for larger datasets
-- Add API layer for programmatic access
-- Introduce parallel processing for large repositories
-- Enhance with machine learning-based detection
+## Current Status and Examples
 
-## Development Timeline
+### Proven Case Studies
 
-**Total Duration**: 5 weeks
+The phased instruction approach has successfully created:
 
-| Week | Phase | Key Deliverable |
-|------|-------|----------------|
-| 1 | Setup + GitHub API | Working CLI with API access |
-| 2 | API Integration + Analysis | Fetch commits, PRs, and issues |
-| 3 | Multi-Source Analysis + Detection | Parse and analyze all sources |
-| 4 | Detection + Reporting | Generate multi-source reports |
-| 5 | Testing + Documentation | Production-ready MVP |
+1. **dikuclient** (63 PRs): Comprehensive 60+ page case study
+2. **DikuMUD** (167 PRs): Detailed 40+ page case study  
+3. **diku** (30 issues): Complete analysis
+
+All created using the phased instruction methodology without hitting rate limits.
+
+### Time Requirements
+
+- **Small repository** (< 30 PRs): 1-2 hours
+- **Medium repository** (50-100 PRs): 2-3 hours
+- **Large repository** (100+ PRs): 3-4 hours
+
+Each phase takes 15-30 minutes depending on repository size.
 
 ## Getting Started
 
-To begin MVP development:
+To begin using the MVP:
 
-1. **Fork/Clone** this repository
-2. **Create feature branch**: `git checkout -b feature/mvp-pipeline`
-3. **Start with Phase 1, Task 1.1**: Set up project structure
-4. **Work sequentially** through tasks, checking off completed items
-5. **Test continuously** as you build
-6. **Update this document** with learnings and adjustments
+1. **Install llmdev**
+   ```bash
+   git clone https://github.com/anicolao/llmdev.git
+   cd llmdev
+   pip install -e .
+   ```
+
+2. **Start your first analysis**
+   ```bash
+   llmdev generate-instructions owner/repo --phase intro
+   ```
+
+3. **Follow the instructions**
+   - Open the generated instruction file
+   - Use an MCP-enabled tool (like GitHub Copilot) 
+   - Complete each phase sequentially
+
+4. **Progress through phases**
+   ```bash
+   llmdev generate-instructions owner/repo --phase overview
+   llmdev generate-instructions owner/repo --phase detection
+   # ... continue through all phases
+   ```
+
+5. **Save your case study**
+   - Save completed analysis to `case_studies/GITHUB_OWNER_REPO.md`
+   - Follow the format from existing case studies
 
 ## Success Metrics
 
-By the end of MVP development, we should have:
+The MVP is successful when:
 
-- ✅ Working CLI tool that can be installed via pip
-- ✅ GitHub API integration for commits, PRs, and issues
-- ✅ Analysis of at least 5 real-world repositories
-- ✅ Reports identifying Copilot usage patterns across multiple sources
-- ✅ Documentation for users to run the tool themselves (including GitHub token setup)
-- ✅ Test suite with 80%+ coverage
-- ✅ Clear insights on what works and what needs improvement
+- ✅ Can generate instructions for any public repository
+- ✅ Instructions are clear and actionable
+- ✅ Produces high-quality case studies (30-50 pages)
+- ✅ Works without API rate limit issues
+- ✅ Completed in reasonable time (2-3 hours)
+- ✅ Output follows consistent format
+- ✅ Results are actionable and insightful
 
-## Next Steps After MVP
+## Future Enhancements
 
-Once the MVP is complete and validated:
+Potential improvements to the phased instruction approach:
 
-1. Gather feedback from initial users
-2. Evaluate accuracy of detection heuristics
-3. Identify bottlenecks and performance issues
-4. Decide on modularization strategy
-5. Plan for Phase 2 (as per VISION.md)
+1. **More detailed phase instructions** with additional examples
+2. **Customizable templates** for different repository types
+3. **Automated metrics collection** during phase execution
+4. **Integration with additional MCP tools** beyond GitHub
+5. **Batch processing** for analyzing multiple repositories
+6. **Enhanced output formats** (interactive HTML, visualizations)
 
 ---
 
-*This MVP document is a living document. Update it as you learn and adjust the plan based on what you discover during development.*
+*This MVP document reflects the current working approach. The original REST API-based approach described in earlier versions failed due to rate limits and has been replaced with this proven phased instruction methodology.*

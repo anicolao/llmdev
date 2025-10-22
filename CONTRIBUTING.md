@@ -1,233 +1,192 @@
 # Contributing to llmdev
 
-Thank you for your interest in contributing to llmdev! This document provides guidelines and information for contributors.
+Thank you for your interest in contributing to llmdev! This document provides guidelines for contributors.
 
-## Development Setup
+## Project Mission
+
+The llmdev project studies how LLMs like GitHub Copilot are used to build real software systems. Our approach is evidence-based analysis through comprehensive case studies.
+
+See `.github/copilot-instructions.md` for detailed project guidance and best practices.
+
+## Ways to Contribute
+
+### 1. Create Case Studies
+
+The most valuable contribution is analyzing repositories and creating case studies:
+
+**Process:**
+1. Choose an interesting repository (preferably with visible LLM usage)
+2. Use `llmdev generate-instructions` to start phased analysis
+3. Follow instructions through all 9 phases
+4. Create comprehensive case study following existing format
+5. Save to `case_studies/GITHUB_OWNER_REPO.md`
+6. Submit pull request
+
+**What makes a good case study:**
+- Thorough analysis (30-50 pages)
+- Clear development story arc
+- Actual prompts extracted and analyzed
+- Iteration patterns explained
+- Actionable best practices
+- Evidence-based insights
+
+See existing case studies in `case_studies/` for examples.
+
+### 2. Improve Instructions
+
+Help enhance the phased instruction templates:
+
+**Areas for improvement:**
+- Clarify phase objectives
+- Add more examples and guidance
+- Improve task descriptions
+- Enhance output templates
+- Update based on user feedback
+
+**Files to edit:**
+- `src/llmdev/mcp_instructions.py` - Instruction generator
+- Instruction templates within the generator
+
+### 3. Enhance Documentation
+
+Improve project documentation:
+
+- Update README with clearer examples
+- Enhance QUICKSTART guide
+- Add FAQ sections
+- Create video tutorials or walkthroughs
+- Document edge cases and tips
+
+### 4. Code Improvements
+
+For developers familiar with the codebase:
+
+**Legacy components** (deprecated but maintained):
+- `analyzer.py` - Direct API analysis
+- `github_client.py` - REST API client
+- `detector.py` - Pattern detection
+- `reporter.py` - Automated reports
+
+These components are retained for edge cases but not primary workflow.
+
+**Active components:**
+- `cli.py` - Command-line interface
+- `mcp_instructions.py` - Instruction generation
+- `analyzers/` - Analysis helpers (for future automation)
+- `cache/` - Caching infrastructure
+
+## Development Setup (For Code Contributions)
 
 ### 1. Fork and Clone
 
 ```bash
-# Fork the repository on GitHub, then clone your fork
 git clone https://github.com/YOUR-USERNAME/llmdev.git
 cd llmdev
 ```
 
-### 2. Set Up Development Environment
+### 2. Set Up Environment
 
 ```bash
-# Create and activate virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install in development mode with dev dependencies
+source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -e ".[dev]"
 ```
 
-### 3. Create a Feature Branch
+### 3. Create Feature Branch
 
 ```bash
 git checkout -b feature/your-feature-name
 ```
 
-## Development Workflow
-
-### Running Tests
-
-Always run tests before committing:
+### 4. Run Tests
 
 ```bash
 # Run all tests
 pytest
 
-# Run with coverage report
-pytest --cov=llmdev --cov-report=html
+# Run with coverage
+pytest --cov=llmdev
 
-# Run specific test file
-pytest tests/test_detector.py
-
-# Run with verbose output
-pytest -v
+# Run specific tests
+pytest tests/test_mcp_instructions.py -v
 ```
-
-### Code Style
-
-We use standard Python tools for code quality:
-
-```bash
-# Format code with black
-black src/ tests/
-
-# Check code style with flake8
-flake8 src/ tests/
-
-# Type checking with mypy (optional but recommended)
-mypy src/
-```
-
-### Testing Your Changes
-
-1. **Unit Tests**: Test individual components in isolation
-2. **Integration Tests**: Test end-to-end workflows
-3. **Manual Testing**: Run the CLI on real repositories
-
-Example manual test:
-```bash
-llmdev analyze anicolao/llmdev --max-commits 10 --verbose
-```
-
-## Code Organization
-
-```
-llmdev/
-├── src/llmdev/
-│   ├── __init__.py       # Package initialization
-│   ├── cli.py            # Command-line interface
-│   ├── config.py         # Configuration management
-│   ├── github_client.py  # GitHub API client
-│   ├── analyzer.py       # Main analysis orchestration
-│   ├── detector.py       # Copilot detection logic
-│   └── reporter.py       # Report generation
-└── tests/
-    ├── test_detector.py      # Detector unit tests
-    └── test_integration.py   # Integration tests
-```
-
-## Areas for Contribution
-
-### 1. Detection Improvements
-
-Help improve Copilot detection accuracy:
-
-- Add new detection heuristics
-- Improve existing pattern matching
-- Reduce false positives
-- Add support for other LLM tools (ChatGPT, Claude, etc.)
-
-### 2. Features
-
-Implement new features from the roadmap:
-
-- Enhanced reporting (HTML, charts, visualizations)
-- Performance optimizations
-- Better error handling
-- Additional GitHub API integrations
-
-### 3. Testing
-
-Expand test coverage:
-
-- Add more unit tests
-- Create integration tests for real repositories
-- Add edge case tests
-- Performance benchmarking
-
-### 4. Documentation
-
-Improve documentation:
-
-- Add code examples
-- Create tutorials
-- Document detection heuristics
-- Add FAQ section
-
-### 5. Bug Fixes
-
-Help fix issues:
-
-- Check the issue tracker for bugs
-- Reproduce and fix reported issues
-- Add regression tests
 
 ## Pull Request Process
 
-### 1. Before You Submit
+### For Case Studies
 
-- [ ] Run all tests and ensure they pass
-- [ ] Add tests for new functionality
-- [ ] Update documentation if needed
-- [ ] Follow code style guidelines
-- [ ] Write clear commit messages
+1. Ensure case study follows the standard format
+2. Include all required sections
+3. Provide evidence-based insights
+4. Follow naming convention: `GITHUB_OWNER_REPO.md`
+5. Place in `case_studies/` directory
 
-### 2. Commit Messages
+### For Code/Documentation Changes
+
+1. Run tests and ensure they pass
+2. Update documentation if needed
+3. Write clear commit messages
+4. Keep changes focused and minimal
+
+### Commit Messages
 
 Use clear, descriptive commit messages:
 
 ```
-Add support for detecting ChatGPT mentions
+Add case study for microsoft/calculator
 
-- Extend detector to recognize ChatGPT keywords
-- Add tests for ChatGPT detection
-- Update documentation with new capability
+- Complete 9-phase analysis
+- Extract 15 prompt examples
+- Identify 3 key development patterns
+- Document lessons learned
 ```
 
-### 3. Pull Request Description
+## Case Study Guidelines
 
-Include in your PR description:
+### Required Sections
 
-- **What**: Brief description of changes
-- **Why**: Motivation and context
-- **How**: Implementation approach
-- **Testing**: How you tested the changes
-- **Screenshots**: For UI/output changes
+1. **Executive Summary** - Key findings overview
+2. **Repository Overview** - Basic statistics
+3. **Development Story Arc** - Project evolution
+4. **LLM Usage Patterns** - Evidence of LLM assistance
+5. **Prompt Analysis** - Effective prompts and patterns
+6. **Iteration Patterns** - Quick wins vs complex work
+7. **Development Patterns** - Practices observed
+8. **Best Practices** - Actionable recommendations
+9. **Technical Insights** - Technology-specific notes
+10. **Conclusion** - Summary and takeaways
+11. **Appendix: Methodology** - How analysis was performed
 
-### 4. Review Process
+### Quality Standards
 
-- Maintainers will review your PR
-- Address any feedback or requested changes
-- Once approved, your PR will be merged
-
-## Development Tips
-
-### Testing with Mock Data
-
-For faster iteration, use mock data in tests:
-
-```python
-from llmdev.detector import CopilotDetector
-
-detector = CopilotDetector()
-commit_data = {
-    'sha': 'abc123',
-    'message': 'Add feature with Copilot',
-    'author': 'developer'
-}
-detections = detector.detect_in_commit(commit_data)
-```
-
-### Testing with Real APIs
-
-For testing API integration, use small repositories:
-
-```bash
-# Test with this repository (small and controlled)
-llmdev analyze anicolao/llmdev --max-commits 5
-```
-
-### Debugging
-
-Enable verbose logging for debugging:
-
-```python
-import logging
-logging.basicConfig(level=logging.DEBUG)
-```
-
-Or use the CLI flag:
-```bash
-llmdev analyze owner/repo --verbose
-```
+- **Evidence-based**: Every claim backed by specific examples
+- **Actionable**: Clear recommendations others can apply
+- **Comprehensive**: Cover all aspects of development
+- **Well-structured**: Easy to navigate and reference
+- **Professional**: Polished writing and formatting
 
 ## Questions?
 
-- Open an issue for bugs or feature requests
-- Start a discussion for questions or ideas
-- Review existing issues and PRs for context
+- Review existing case studies for examples
+- Check `.github/copilot-instructions.md` for detailed project guidance
+- Open an issue for questions or discussions
+- Review closed PRs for context on past decisions
 
 ## Code of Conduct
 
 - Be respectful and inclusive
 - Provide constructive feedback
-- Focus on the code, not the person
+- Focus on improving the project
 - Help create a welcoming community
+
+## Getting Started
+
+The best way to start contributing:
+
+1. **Read existing case studies** - Understand the format and depth
+2. **Pick a repository** - Choose something interesting to analyze
+3. **Follow the phased approach** - Use `generate-instructions` for each phase
+4. **Document thoroughly** - Capture insights as you analyze
+5. **Submit your case study** - Share what you learned
 
 Thank you for contributing to llmdev! 🎉
