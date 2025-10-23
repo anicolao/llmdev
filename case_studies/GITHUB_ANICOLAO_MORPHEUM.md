@@ -11,7 +11,7 @@
 **Project Scope:** TypeScript-based Matrix bot with multi-LLM support and project room management
 
 **Analysis Date:** October 23, 2025  
-**Analysis Method:** GitHub API + manual PR review
+**Analysis Method:** GitHub API + manual PR review + task/devlog analysis
 
 ---
 
@@ -20,17 +20,19 @@
 The morpheum repository demonstrates **sustained, intensive AI-assisted development** across multiple development periods spanning August-September 2025. The project evolved through focused sprints—from foundational architecture (August 20) to user experience maturation (September 14-15) to major feature development (Project Rooms, late August-early September) to quality refinement (late August 23-24)—showcasing how AI-assisted development can maintain velocity while increasing sophistication.
 
 **What Makes This Special:**
-- **Nine development periods analyzed**: Foundation sprint + GitHub integration + Workflow maturation + Quality/UX refinement + Infrastructure/Feature development + Maturation sprint + Issue management
-- **100% AI-assisted**: All 76 analyzed PRs authored by copilot-swe-agent[bot]
+- **Complete development history**: Prehistory (Gemini CLI bootstrapping) + Nine PR-based development periods
+- **100% AI-assisted**: All 76 analyzed PRs authored by copilot-swe-agent[bot], bootstrapped via Gemini CLI
 - **User prompts extracted**: Original requests from GitHub issues drive all work
 - **Incremental architecture**: Each PR builds systematically on previous work
 - **Production quality**: Comprehensive test coverage (50→353 tests), proper error handling, professional UX
 - **Multi-LLM design**: Abstract provider interface supporting OpenAI, Ollama, and GitHub Copilot integration
 - **Major features**: GitHub Copilot provider, GitHub Pages site, Project Rooms, Issue Management dashboard
+- **Documented bootstrapping crisis**: Abandoned original tool (Gemini CLI) mid-development due to failures
 
 **Key Statistics:**
+- **Prehistory:** Aug 9-19 (81 tasks, 108 devlogs) - Gemini CLI bootstrapping → crisis → jail architecture
 - **76 PRs analyzed** across nine development periods (August 20 - September 15, 2025)
-- **100% bot-authored** code (copilot-swe-agent[bot])
+- **100% bot-authored** code (copilot-swe-agent[bot] for PRs, Gemini CLI/Claude Code for prehistory)
 - **Sprint 1 (Aug 20)**: 10 PRs in 17 hours - Core functionality & architecture
 - **Sprint 2 (Aug 21)**: 20+ PRs in ~6 hours - GitHub integration & ecosystem
 - **Sprint 3 (Aug 22-23)**: 10 PRs - Workflow maturation & bot robustness
@@ -70,6 +72,126 @@ The project demonstrates multiple development sprints and modes:
 ---
 
 ## Development Story Arc
+
+### Phase 0: Prehistory - Gemini CLI Bootstrapping (Aug 9-19, 2025)
+
+**Context:** Before the PR-based development captured in this case study began, morpheum was bootstrapped using Google's Gemini CLI tool. This "prehistory" phase (August 9-19) laid the foundation for the repository but is not documented in GitHub PRs—only in tasks and devlogs.
+
+**Evidence Sources:**
+- 81 tasks migrated from legacy `TASKS.md`
+- 108 devlog entries migrated from legacy `DEVLOG.md`
+- Tasks #1-5: Initial setup, Matrix bot, Gemini CLI integration
+- Devlogs document friction points, tool transitions, architecture decisions
+
+#### Bootstrap Process (Tasks #1-5)
+
+**Task #1: Initial Project Setup**
+- Created `src/morpheum-bot/` directory
+- Installed Matrix bot SDK and TypeScript
+- Set up `tsconfig.json`
+
+**Task #2: Basic Bot Implementation**
+- Implemented `src/morpheum-bot/index.ts`
+- Connected to Matrix homeserver
+- Implemented `!help` command
+
+**Task #3: Gemini CLI Integration (Proof of Concept)**
+- Forked Gemini CLI repository
+- Investigated TypeScript → Gemini CLI invocation
+- Implemented `!gemini <prompt>` command
+
+**Task #4: GitHub Integration in Gemini CLI**
+- Added `gh` tool to forked Gemini CLI
+- Tested `gh` commands through bot
+- Documented invocation patterns
+
+**Task #5: DEVLOG.md and TASKS.md Management**
+- Bot read/write to DEVLOG.md and TASKS.md
+- Commands to add devlog entries and update task status
+
+#### The Gemini CLI Crisis (Aug 11-12)
+
+**Devlog 2025-08-11: "Refactor the gemini-cli into a library"**
+- Refactored Gemini CLI core into `library.ts`
+- Created non-React `ToolScheduler` for shell/file operations
+- Integrated library into morpheum-bot (replacing `exec` calls)
+- **Friction:** "Repeatedly struggled with the `replace` tool"
+- **Success:** "Library-first approach superior to shelling out to CLI"
+
+**Devlog 2025-08-12: "Switching from Gemini CLI to claudecode"**
+- **Critical Decision:** Abandoned Gemini CLI mid-project
+- **Reasons for abandoning:**
+  - Token limit exhaustion (6M tokens/hour due to `replace` tool failures)
+  - Procedural failures (not following DEVLOG.md, AGENTS.md conventions)
+  - Unexplained pauses mid-task
+  - Usage limits (60-90 min/day effective limit)
+  - No upstream support (GitHub issue #5983 ignored)
+
+**Quote from devlog:** _"While the original goal was to use a tool like Gemini CLI to bootstrap its own replacement, the current state of the tool makes this untenable."_
+
+#### The Jail Architecture Pivot (Aug 17-18)
+
+**Devlog 2025-08-17: "Implement and Debug Jailed Agent Environment"**
+- Built isolated container environment for agent execution
+- **Failed Approach #1:** Custom Docker image via `nix build` on macOS (Linux dependencies incompatible)
+- **Failed Approach #2:** `nix build` inside container (nested virtualization + KVM unavailable)
+- **Successful Approach #3:** Standard `nixos/nix` image with runtime tool installation
+
+**Technical Breakthroughs:**
+- Networking debugging (Colima `--network-address` flag)
+- Docker context configuration (`DOCKER_HOST` in `shellHook`)
+- Shell interaction (non-interactive `bash -l` for clean I/O)
+
+**Devlog 2025-08-18: "Stabilize Jail Communication"**
+- Extensive debugging of shell environment inside Docker
+- **Key Discovery:** `socat`'s `SYSTEM:"bash -li 2>&1"` enables stderr redirection
+- Implemented readiness probe (polling with `echo` command)
+- **Success:** "Robust, stable, and correctly captures stderr"
+
+**Devlog 2025-08-18: "Remove gemini-cli Submodule"**
+- Confirmed no remaining code dependencies
+- Removed submodule from repository
+- **Pattern:** Clean break after architectural pivot
+
+#### Prehistory Patterns Identified
+
+**What Went Well:**
+1. **Rapid bootstrapping** - Matrix bot operational within days
+2. **Library-first refactoring** - Successfully extracted Gemini CLI core
+3. **Test-driven approach** - Unit/integration tests caught bugs early
+4. **Iterative debugging** - Three jail architecture attempts led to robust solution
+5. **Documentation discipline** - DEVLOG.md and TASKS.md from inception
+
+**Challenges & Anti-Patterns:**
+1. **Tool dependency risk** - Betting on unstable tool (Gemini CLI) created crisis
+2. **Token consumption bugs** - `replace` tool failures caused 6M token/hour usage
+3. **Procedural non-compliance** - Gemini CLI ignored project conventions
+4. **Platform compatibility** - macOS → Linux Docker issues with Nix builds
+5. **Nested virtualization** - Container-in-container KVM requirements failed
+
+**Critical Learnings:**
+1. **"Don't depend on broken tools"** - Switch quickly when tool becomes blocker
+2. **"Runtime > Build-time"** - Installing packages at runtime more portable than custom images
+3. **"Non-interactive shells for automation"** - Clean I/O without terminal echo
+4. **"Readiness probes essential"** - Services with slow startup need validation
+5. **"Environment automation crucial"** - `shellHook` auto-configuration improves DX
+
+**Transition to PR-Based Development:**
+- Gemini CLI abandoned by August 12
+- Jail architecture stabilized by August 18
+- Transitioned to Claude Code / GitHub Copilot workflow
+- First PR (#1) created August 20 - repository now production-ready for collaborative AI development
+
+**Prehistory Significance:**
+The August 9-19 period established:
+- Matrix bot foundation
+- Jail sandboxing architecture
+- DEVLOG/TASKS workflow (later migrated to directory structure in PR #47)
+- Hard lessons about tool selection and architecture robustness
+
+This prehistory demonstrates that **even the bootstrapping of an AI development tool faced significant AI tooling failures**, but systematic debugging and willingness to pivot led to a solid foundation for the subsequent PR-based development phases.
+
+---
 
 ### Phase 1: Foundation & Integration (PRs #1-3, Aug 20 01:36-03:00)
 
