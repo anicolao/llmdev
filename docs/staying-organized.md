@@ -5,42 +5,57 @@ title: How To Stay Organized
 
 # How To Stay Organized
 
-As projects grow beyond the initial MVP, organization becomes critical. The key is **design before code**—especially choosing between credible alternative implementation plans before committing to an approach.
+As projects grow beyond the initial MVP, organization becomes critical. The key is **design before code**—have AI evaluate alternatives before implementing.
 
-## The Design Analysis Step
+**Proven by evidence:** DikuMUD's design-first approach (PR #162) prevented 3-4 refactor cycles, reducing work from 6+ commits to 1-3 commits per feature.
 
-When facing a complex feature, pause to evaluate at least two different implementation approaches before coding.
+## Have AI Analyze Design Alternatives
 
-### Why Alternative Analysis Matters
+When facing a complex feature, prompt AI to evaluate at least two different implementation approaches before coding.
+
+### Prompt Template for Design Analysis
+
+```markdown
+I need to implement [feature] that [specific requirement].
+
+Before implementing, please analyze at least 2 different 
+approaches to solve this:
+
+For each alternative:
+1. Describe the approach
+2. List pros and cons
+3. Estimate complexity (small/medium/large)
+4. Identify risks or unknowns
+
+After analysis, recommend which approach and explain why.
+
+Consider: maintainability, performance, complexity, time to implement
+```
+
+### Why This Pattern Works
 
 **Without alternatives:**
-- You commit to the first idea that sounds reasonable
-- Miss better approaches that become obvious later
-- Waste time on rework when initial approach hits limits
+- AI commits to first idea that sounds reasonable
+- You miss better approaches that become obvious later
+- More rework when initial approach hits limits
 
 **With alternatives:**
-- Surface trade-offs explicitly
-- Choose the right complexity level
+- AI surfaces trade-offs explicitly
+- You choose the right complexity level
 - Avoid premature optimization
 - Build confidence through comparison
 
-**Evidence**: DikuMUD PR #162 explicitly stated "Focus on writing only the design doc... don't implement anything yet." This design-first approach prevented 3-4 refactor cycles that would have occurred with code-first.
+## Example: AI-Generated Design Alternatives
 
-## The Two-Alternative Minimum
+**Context from dikuclient:** Need to handle ANSI color codes from server
 
-Always generate at least two credible alternatives before implementing.
+**Prompt to AI:**
+```markdown
+We need to handle ANSI color codes from the MUD server.
+Analyze 2-3 different approaches and recommend one.
+```
 
-### What Makes an Alternative "Credible"?
-
-Each option should:
-- Actually solve the stated problem
-- Have clear pros and cons
-- Be implementable with available tools/skills
-- Differ meaningfully from other options (not just minor variations)
-
-### Example: dikuclient Color Support
-
-**Context**: Need to handle ANSI color codes from server
+**AI's Analysis:**
 
 **Alternative 1: Client-side parsing**
 - Parse ANSI codes in client JavaScript
@@ -58,11 +73,50 @@ Each option should:
 - **Pro**: Tiny, easy to understand, sufficient for MVP
 - **Con**: Doesn't handle all ANSI codes
 
-**Decision**: Started with Alternative 3 in PR #2 (2 commits). Later enhanced incrementally. Right complexity for the phase.
+**Decision from case study**: Started with Alternative 3 in PR #2 (2 commits). Right complexity for MVP phase. Later enhanced incrementally as needed.
+
+## When to Use Design Analysis
+
+Not every feature needs deep analysis. Use AI to help decide:
+
+### Quick Decision Prompt
+
+```markdown
+For implementing [feature], should I:
+A) Implement directly (straightforward, one clear approach)
+B) Do design analysis first (multiple viable approaches, affects architecture)
+
+What's your recommendation and why?
+```
+
+### AI-Assisted Decision Tree
+
+**⚡ Implement Directly** (prompt AI to code immediately):
+- Simple CRUD endpoint
+- Obvious bug fix
+- Minor UI tweak
+- Documentation update
+- Test for existing code
+
+**Prompt**: `"Implement [feature]. Make changes as small as possible."`
+
+### 📝 Light Design** (have AI outline approach in issue):
+- New feature with one clear approach
+- Moderate complexity
+- Affects 2-3 files
+
+**Prompt**: `"Describe how to implement [feature], then implement it."`
+
+### 📐 Full Design Analysis** (separate design-then-implement):
+- Multiple viable approaches exist
+- Affects architecture or key abstractions
+- High cost if wrong approach chosen
+
+**Prompt**: Use the design analysis template above, then implement separately.
 
 ## Design Document Template
 
-Use this template for features requiring analysis:
+When AI recommends full design analysis, use this template:
 
 ```markdown
 # Design: [Feature Name]
@@ -71,116 +125,31 @@ Use this template for features requiring analysis:
 [What are we solving? Why does it matter?]
 
 ## Success Criteria
-[How will we know this works?]
 - [ ] Measurable criterion 1
 - [ ] Measurable criterion 2
 
 ## Alternative 1: [Name]
 **Approach**: [High-level description]
-
-**Pros**:
-- [Advantage 1]
-- [Advantage 2]
-
-**Cons**:
-- [Limitation 1]
-- [Limitation 2]
-
-**Estimated Complexity**: [Small/Medium/Large]
+**Pros**: [Advantages]
+**Cons**: [Limitations]
+**Complexity**: [Small/Medium/Large]
 
 ## Alternative 2: [Name]
-[Same structure as Alternative 1]
-
-## Alternative 3: [Name] (if needed)
 [Same structure]
 
 ## Recommendation
 **Choose**: Alternative [N]
+**Rationale**: [Why? What trade-offs?]
 
-**Rationale**: [Why this one? What trade-offs are we accepting?]
-
-**Implementation Plan**:
+## Implementation Plan
 1. [Step 1]
 2. [Step 2]
 3. [Step 3]
-
-**Out of Scope** (for now):
-- [What we're explicitly not doing]
-- [Why we're deferring it]
 ```
 
-## When to Use Design Analysis
+Give this template to AI and have it fill it out before coding.
 
-Not every feature needs deep analysis. Use this decision tree:
-
-### ⚡ Skip Design Doc (Quick Implementation)
-- Adding simple CRUD endpoint
-- Fixing obvious bug
-- Minor UI tweak
-- Updating documentation
-- Adding test for existing code
-
-**Action**: Write prompt and implement directly (1-2 commits expected)
-
-### Light Design (Issue Description)
-- New feature with one clear approach
-- Moderate complexity
-- Affects 2-3 files
-
-**Action**: Write problem statement in issue, outline approach, implement (3-5 commits expected)
-
-### 📐 Full Design Doc (Separate PR)
-- Multiple viable approaches exist
-- Affects architecture or key abstractions
-- Impacts multiple components
-- High cost if we choose wrong approach
-
-**Action**: Design doc in separate PR/issue, get review, then implement (6+ commits expected)
-
-## Design-First in Practice
-
-### Example 1: morpheum Interface Design (PR #10)
-
-**Situation**: Needed to integrate Copilot alongside existing OpenAI provider
-
-**Process**:
-1. Created design doc comparing 3 approaches
-2. Chose interface-first architecture
-3. Implemented in PR #10 (1 commit, 1h 18m)
-
-**Result**: Later added Anthropic, DeepSeek, Ollama providers—each took 1-2 hours because interface was designed well.
-
-**ROI**: 30 min design → 5x faster provider additions → saved 6-8 hours total
-
-### Example 2: DikuMUD Zone Validation (PR #119)
-
-**Situation**: 3D room layouts had consistency errors (35 found by human inspection)
-
-**Process**:
-1. Evaluated 3 alternatives:
-   - Manual validation (not scalable)
-   - Simple rule checker (misses spatial issues)
-   - BFS-based graph validator (comprehensive)
-2. Chose Alternative 3
-3. Built validator tool in separate PR
-
-**Result**: Found all 35 errors automatically, enabled incremental fixing with validation between each fix.
-
-**Impact**: Prevented future geometry bugs entirely (validator runs in CI)
-
-### Example 3: dikuclient Networking Layer (Issue #1 → PR #2)
-
-**Situation**: Need client-server architecture
-
-**Process**:
-1. Issue #1 created comprehensive design doc
-2. Evaluated WebSocket vs raw TCP, decided WebSocket
-3. Laid out architecture: client ↔ proxy ↔ MUD server
-4. PR #2 implemented the design
-
-**Result**: All 63 subsequent PRs built on this architecture—no architectural rework needed.
-
-## Prompts for Design Analysis
+## Prompts for Design-First Development
 
 ### Generate Alternatives Prompt
 
