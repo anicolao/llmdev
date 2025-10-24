@@ -13,22 +13,22 @@ This site distills insights from analyzing real-world projects built with GitHub
 
 <div class="nav-cards">
   <div class="nav-card">
-    <h3>🚀 <a href="getting-started.html">Getting Started</a></h3>
+    <h3><a href="getting-started.html">Getting Started</a></h3>
     <p>Begin with a clear vision, design analysis, and tiny MVP</p>
   </div>
   
   <div class="nav-card">
-    <h3>📋 <a href="staying-organized.html">Staying Organized</a></h3>
+    <h3><a href="staying-organized.html">Staying Organized</a></h3>
     <p>Design-first development and structured decision-making</p>
   </div>
   
   <div class="nav-card">
-    <h3>📈 <a href="leveling-up.html">Leveling Up</a></h3>
+    <h3><a href="leveling-up.html">Leveling Up</a></h3>
     <p>Advanced patterns for rapid iteration and quality</p>
   </div>
   
   <div class="nav-card">
-    <h3>🔧 <a href="sharpen-the-saw.html">Sharpen the Saw</a></h3>
+    <h3><a href="sharpen-the-saw.html">Sharpen the Saw</a></h3>
     <p>Consolidation, refinement, and sustainable velocity</p>
   </div>
 </div>
@@ -46,10 +46,10 @@ Every practice on this site is backed by analysis of real repositories:
 
 Most AI coding advice is speculation. This site is built on **systematic analysis** of what actually works in production:
 
-✅ Specific examples from real PRs  
-✅ Metrics that matter (velocity, iteration, quality)  
-✅ Anti-patterns to avoid  
-✅ Actionable templates you can use today  
+- Specific examples from real PRs  
+- Metrics that matter (velocity, iteration, quality)  
+- Anti-patterns to avoid  
+- Actionable templates you can use today  
 
 ## About This Site
 

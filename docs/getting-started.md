@@ -146,14 +146,14 @@ Result: Working prototype in 3 hours. 73 more PRs refined and extended it.
 **Foundation**: Everything else builds on this kernel
 
 **Anti-pattern to avoid**: 
-❌ Trying to build the complete system in PR #1
-❌ "This needs X, Y, and Z before it can work"
-❌ Multi-week initial development before first commit
+✗ Trying to build the complete system in PR #1
+✗ "This needs X, Y, and Z before it can work"
+✗ Multi-week initial development before first commit
 
 **Proven pattern**:
-✅ Build smallest possible working thing
-✅ Get it running and tested
-✅ Iterate from there
+✓ Build smallest possible working thing
+✓ Get it running and tested
+✓ Iterate from there
 
 ## Quick Start Formula
 
@@ -217,29 +217,29 @@ Please make minimal changes to implement this.
 
 You're on track if:
 
-- ✅ README takes 30 minutes to write (not days)
-- ✅ VISION fits on one page (not a book)
-- ✅ MVP works within 2-4 hours (not weeks)
-- ✅ First 3 PRs complete in one day (not spread over weeks)
-- ✅ You can show someone working software on day 1
+- README takes 30 minutes to write (not days)
+- VISION fits on one page (not a book)
+- MVP works within 2-4 hours (not weeks)
+- First 3 PRs complete in one day (not spread over weeks)
+- You can show someone working software on day 1
 
 **Evidence**: All analyzed projects that followed this pattern achieved 3-11 PRs/day sustained velocity.
 
 ## Common Pitfalls
 
-### ❌ Starting Without Documentation
+### Starting Without Documentation
 "I'll document it later" leads to:
 - AI making wrong assumptions
 - Inconsistent direction
 - More iteration (3-5x more commits)
 
-### ❌ Perfectionism in MVP
+### Perfectionism in MVP
 "It needs [long list] before it's ready" results in:
 - Analysis paralysis
 - Never shipping
 - Lost momentum
 
-### ❌ Vague Vision
+### Vague Vision
 "Build a good project" doesn't guide decisions.
 AI will optimize for wrong goals.
 

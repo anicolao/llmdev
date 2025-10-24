@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>How To Sharpen the Saw | LLM Development</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="How To Sharpen the Saw" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Proven practices for building software with AI assistance" />
+<meta property="og:description" content="Proven practices for building software with AI assistance" />
+<link rel="canonical" href="http://0.0.0.0:4000/llmdev/sharpen-the-saw.html" />
+<meta property="og:url" content="http://0.0.0.0:4000/llmdev/sharpen-the-saw.html" />
+<meta property="og:site_name" content="LLM Development" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="How To Sharpen the Saw" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Proven practices for building software with AI assistance","headline":"How To Sharpen the Saw","url":"http://0.0.0.0:4000/llmdev/sharpen-the-saw.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/llmdev/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://0.0.0.0:4000/llmdev/feed.xml" title="LLM Development" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/llmdev/">LLM Development</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/llmdev/">Home</a><a class="page-link" href="/llmdev/getting-started.html">How To Get Started</a><a class="page-link" href="/llmdev/staying-organized.html">How To Stay Organized</a><a class="page-link" href="/llmdev/leveling-up.html">How To Level Up</a><a class="page-link" href="/llmdev/sharpen-the-saw.html">How To Sharpen the Saw</a><a class="page-link" href="/llmdev/about.html">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <h1 id="how-to-sharpen-the-saw">How To Sharpen the Saw</h1>
+
+<p>Sustainable velocity requires periodic stops to consolidate, refine, and maintain quality. “Sharpen the saw” practices prevent technical debt accumulation and keep momentum high over weeks and months.</p>
+
+<h2 id="the-consolidation-rhythm">The Consolidation Rhythm</h2>
+
+<p>Every 10-15 feature PRs, pause to consolidate. This isn’t “slowing down”—it’s maintaining the capacity to move fast.</p>
+
+<h3 id="what-is-a-consolidation-pr">What is a Consolidation PR?</h3>
+
+<p>A checkpoint that:</p>
+<ul>
+  <li>Adds tests for recent features</li>
+  <li>Updates documentation</li>
+  <li>Fixes flaky tests</li>
+  <li>Pays down technical debt</li>
+  <li>Creates validation tools</li>
+  <li>Verifies everything still works together</li>
+</ul>
+
+<p><strong>Not</strong>: New features, architectural changes, or scope expansion.</p>
+
+<h3 id="the-10-15-pr-rhythm">The 10-15 PR Rhythm</h3>
+
+<p><strong>Why this frequency?</strong></p>
+<ul>
+  <li>Short enough: Debt doesn’t compound exponentially</li>
+  <li>Long enough: Batch related improvements efficiently</li>
+  <li>Predictable: Team knows consolidation is coming</li>
+</ul>
+
+<p><strong>Evidence from projects:</strong></p>
+<ul>
+  <li>dikuclient PR #15: “Verify and document barebones implementation”</li>
+  <li>DikuMUD PR #122: Comprehensive quest summary documentation</li>
+  <li>morpheum: Multiple testing/stabilization phases between feature pushes</li>
+</ul>
+
+<h3 id="consolidation-pr-template">Consolidation PR Template</h3>
+
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh"># PR: Consolidate Phase [N] Work</span>
+
+<span class="gu">## Testing</span>
+<span class="p">-</span> [ ] Add tests for features from PR #X-Y
+<span class="p">-</span> [ ] Fix flaky test in [module]
+<span class="p">-</span> [ ] Increase coverage from [X]% to [Y]%
+<span class="p">-</span> [ ] Add integration test for [workflow]
+
+<span class="gu">## Documentation  </span>
+<span class="p">-</span> [ ] Update README with new features
+<span class="p">-</span> [ ] Document [complex feature] in detail
+<span class="p">-</span> [ ] Add examples for [API]
+<span class="p">-</span> [ ] Update VISION if direction shifted
+
+<span class="gu">## Technical Debt</span>
+<span class="p">-</span> [ ] Refactor [duplicated code]
+<span class="p">-</span> [ ] Improve error messages in [module]
+<span class="p">-</span> [ ] Remove deprecated [feature]
+<span class="p">-</span> [ ] Optimize [slow operation]
+
+<span class="gu">## Validation</span>
+<span class="p">-</span> [ ] Run full test suite
+<span class="p">-</span> [ ] Check all examples still work
+<span class="p">-</span> [ ] Verify performance benchmarks
+<span class="p">-</span> [ ] Test on fresh install
+
+<span class="gu">## Reflection</span>
+What worked well in last 10-15 PRs?
+What should we do differently?
+What patterns emerged that we should codify?
+</code></pre></div></div>
+
+<h2 id="testing-consolidation">Testing Consolidation</h2>
+
+<p>Tests should grow with features, but occasionally need focused attention.</p>
+
+<h3 id="test-debt-indicators">Test Debt Indicators</h3>
+
+<p>You have test debt when:</p>
+<ul>
+  <li>Coverage is decreasing</li>
+  <li>Tests are flaky (pass/fail inconsistently)</li>
+  <li>Tests take too long to run</li>
+  <li>Tests don’t catch real bugs</li>
+  <li>Tests are brittle (break on unrelated changes)</li>
+</ul>
+
+<h3 id="test-consolidation-checklist">Test Consolidation Checklist</h3>
+
+<p><strong>Coverage gaps:</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Find untested code</span>
+pytest <span class="nt">--cov</span><span class="o">=</span>src <span class="nt">--cov-report</span><span class="o">=</span>html
+<span class="c"># Open htmlcov/index.html</span>
+<span class="c"># Add tests for red sections</span>
+</code></pre></div></div>
+
+<p><strong>Flaky tests:</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Run test 10 times</span>
+<span class="k">for </span>i <span class="k">in</span> <span class="o">{</span>1..10<span class="o">}</span><span class="p">;</span> <span class="k">do </span>pytest tests/test_flaky.py <span class="o">||</span> <span class="nb">break</span><span class="p">;</span> <span class="k">done</span>
+
+<span class="c"># If fails sometimes:</span>
+<span class="c"># 1. Identify timing/race conditions</span>
+<span class="c"># 2. Add explicit waits or mocks</span>
+<span class="c"># 3. Make deterministic</span>
+</code></pre></div></div>
+
+<p><strong>Slow tests:</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Profile test time</span>
+pytest <span class="nt">--durations</span><span class="o">=</span>10
+
+<span class="c"># Speed up by:</span>
+<span class="c"># - Using fixtures more effectively</span>
+<span class="c"># - Mocking expensive operations</span>
+<span class="c"># - Parallelizing with pytest-xdist</span>
+</code></pre></div></div>
+
+<h3 id="test-growth-pattern">Test Growth Pattern</h3>
+
+<p><strong>Healthy growth</strong> (morpheum example):</p>
+<ul>
+  <li>PR #1-20: 50 → 150 tests (foundation)</li>
+  <li>PR #21-50: 150 → 280 tests (features)</li>
+  <li>PR #51-76: 280 → 353 tests (edge cases, integration)</li>
+</ul>
+
+<p>Tests grew steadily with features.</p>
+
+<h2 id="documentation-consolidation">Documentation Consolidation</h2>
+
+<p>Documentation rots fast. Periodic refresh keeps it accurate.</p>
+
+<h3 id="documentation-checklist">Documentation Checklist</h3>
+
+<p><strong>README accuracy:</strong></p>
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Installation steps work on fresh system</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Usage examples are current</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Dependencies are up to date</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Screenshots/output match current version</li>
+</ul>
+
+<p><strong>API documentation:</strong></p>
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />All public functions documented</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Examples show actual usage</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Error conditions explained</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Breaking changes highlighted</li>
+</ul>
+
+<p><strong>Vision alignment:</strong></p>
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />VISION still reflects actual direction</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Success criteria updated based on learnings</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />New principles added if emerged</li>
+</ul>
+
+<h3 id="documentation-prompt">Documentation Prompt</h3>
+
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Review and update documentation after recent changes:
+
+PRs since last update: #X through #Y
+
+Please:
+<span class="p">1.</span> Check README examples still work
+<span class="p">2.</span> Update any outdated screenshots/output
+<span class="p">3.</span> Document new features added in [PR list]
+<span class="p">4.</span> Fix any broken links
+<span class="p">5.</span> Ensure installation steps are current
+
+Test each example by actually running it.
+</code></pre></div></div>
+
+<h2 id="technical-debt-management">Technical Debt Management</h2>
+
+<p>Not all debt is bad. The key is conscious choice and periodic paydown.</p>
+
+<h3 id="conscious-debt-vs-unconscious-debt">Conscious Debt vs Unconscious Debt</h3>
+
+<p><strong>Conscious debt</strong> (acceptable):</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># TODO(PR #47): Optimize this algorithm
+# Current O(n²) implementation works for n &lt; 100
+# Will need O(n log n) when we add feature X
+</span><span class="k">def</span> <span class="nf">slow_but_working</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="c1"># Simple implementation
+</span>    <span class="k">pass</span>
+</code></pre></div></div>
+
+<p>You know:</p>
+<ul>
+  <li>What the debt is</li>
+  <li>Why you took it on</li>
+  <li>What triggers paydown</li>
+  <li>How to fix it</li>
+</ul>
+
+<p><strong>Unconscious debt</strong> (dangerous):</p>
+<ul>
+  <li>Code that’s confusing but “works”</li>
+  <li>Workarounds nobody understands</li>
+  <li>Copy-pasted code with subtle variations</li>
+  <li>Dependencies on deprecated features</li>
+</ul>
+
+<h3 id="debt-paydown-priority">Debt Paydown Priority</h3>
+
+<p><strong>High priority</strong> (fix in consolidation PR):</p>
+<ul>
+  <li>Security vulnerabilities</li>
+  <li>Data corruption risks</li>
+  <li>Flaky tests affecting CI</li>
+  <li>Confusing code in critical paths</li>
+  <li>Duplicated logic (3+ copies)</li>
+</ul>
+
+<p><strong>Medium priority</strong> (plan for next phase):</p>
+<ul>
+  <li>Performance optimizations (if measurable impact)</li>
+  <li>API inconsistencies (if causing confusion)</li>
+  <li>Missing error handling (if users hit it)</li>
+  <li>Code smells (if slowing development)</li>
+</ul>
+
+<p><strong>Low priority</strong> (note for future):</p>
+<ul>
+  <li>Premature optimizations</li>
+  <li>Aesthetic preferences</li>
+  <li>“Nice to have” refactorings</li>
+  <li>Speculative improvements</li>
+</ul>
+
+<h3 id="debt-paydown-prompt">Debt Paydown Prompt</h3>
+
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Technical debt review for consolidation:
+
+Focus areas:
+<span class="p">1.</span> [Module X] has duplicated logic in 3 places
+<span class="p">2.</span> [Function Y] is confusing (see TODO comment)
+<span class="p">3.</span> [Test Z] is flaky (passes 70% of time)
+
+For each:
+<span class="p">1.</span> Explain why it's debt (what's wrong)
+<span class="p">2.</span> Propose minimal fix
+<span class="p">3.</span> Estimate impact if we don't fix
+<span class="p">4.</span> Recommend priority (high/medium/low)
+
+Don't implement yet—just analyze and recommend.
+</code></pre></div></div>
+
+<h2 id="performance-and-optimization">Performance and Optimization</h2>
+
+<p>Optimize based on evidence, not speculation.</p>
+
+<h3 id="when-to-optimize">When to Optimize</h3>
+
+<p><strong>Don’t optimize when:</strong></p>
+<ul>
+  <li>No users complaining</li>
+  <li>No metrics showing problem</li>
+  <li>“Feels like it could be faster”</li>
+  <li>Pre-optimizing for scale you don’t have</li>
+</ul>
+
+<p><strong>Do optimize when:</strong></p>
+<ul>
+  <li>Users report slow operations</li>
+  <li>Benchmarks show regression</li>
+  <li>Operations exceed time budgets</li>
+  <li>Profiling identifies hotspots</li>
+</ul>
+
+<h3 id="optimization-process">Optimization Process</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 1. Measure first</span>
+<span class="nv">$ </span><span class="nb">time </span>npm run operation
+<span class="c"># 3.2 seconds</span>
+
+<span class="c"># 2. Profile</span>
+<span class="nv">$ </span>npm run profile-operation
+<span class="c"># Identified: Database query in loop (N+1 problem)</span>
+
+<span class="c"># 3. Optimize</span>
+<span class="c"># Move query outside loop</span>
+
+<span class="c"># 4. Measure again  </span>
+<span class="nv">$ </span><span class="nb">time </span>npm run operation
+<span class="c"># 0.8 seconds (4x improvement)</span>
+
+<span class="c"># 5. Add benchmark test</span>
+def test_operation_performance<span class="o">()</span>:
+    start <span class="o">=</span> time.time<span class="o">()</span>
+    run_operation<span class="o">()</span>
+    duration <span class="o">=</span> time.time<span class="o">()</span> - start
+    assert duration &lt; 1.0, f<span class="s2">"Too slow: {duration}s"</span>
+</code></pre></div></div>
+
+<p><strong>Key</strong>: Measure before and after. No speculation.</p>
+
+<h2 id="reflection-and-learning">Reflection and Learning</h2>
+
+<p>The most important consolidation activity: learning from what happened.</p>
+
+<h3 id="reflection-questions">Reflection Questions</h3>
+
+<p><strong>After each consolidation:</strong></p>
+
+<p><strong>What worked well?</strong></p>
+<ul>
+  <li>Which prompts led to quick, quality results?</li>
+  <li>What patterns emerged naturally?</li>
+  <li>Which practices should we continue?</li>
+</ul>
+
+<p><strong>What was challenging?</strong></p>
+<ul>
+  <li>Where did we iterate more than expected?</li>
+  <li>What caused confusion or rework?</li>
+  <li>What should we do differently?</li>
+</ul>
+
+<p><strong>What did we learn?</strong></p>
+<ul>
+  <li>Any new patterns worth codifying?</li>
+  <li>Changes to VISION or principles?</li>
+  <li>Tools or techniques to adopt?</li>
+</ul>
+
+<h3 id="capture-learnings">Capture Learnings</h3>
+
+<p><strong>Update copilot-instructions.md:</strong></p>
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gu">## Learnings from Phase 2 (PR #16-30)</span>
+
+<span class="gu">### What Worked</span>
+<span class="p">-</span> Test-first for API endpoints (1-2 commits consistently)
+<span class="p">-</span> Design docs for complex features (prevented 2 refactors)
+
+<span class="gu">### What Didn't Work</span>
+<span class="p">-</span> Starting features without clear success criteria (led to scope creep)
+
+<span class="gu">### New Patterns</span>
+<span class="p">-</span> Always include example usage in PR description
+<span class="p">-</span> Run integration tests before marking PR ready
+
+<span class="gu">### Adjustments</span>
+<span class="p">-</span> Updated prompt template to require success criteria
+<span class="p">-</span> Added integration test step to checklist
+</code></pre></div></div>
+
+<h3 id="learning-prompt">Learning Prompt</h3>
+
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Reflection on PRs #X-Y:
+
+Analyze these PRs for patterns:
+<span class="p">1.</span> Which completed in 1-3 commits? What made them smooth?
+<span class="p">2.</span> Which took 6+ commits? What caused extra iteration?
+<span class="p">3.</span> Did any prompts work particularly well? Extract patterns.
+<span class="p">4.</span> Any anti-patterns emerged? What to avoid?
+
+Format findings as:
+<span class="p">-</span> Patterns to continue
+<span class="p">-</span> Patterns to avoid  
+<span class="p">-</span> Lessons learned
+<span class="p">-</span> Recommended adjustments
+</code></pre></div></div>
+
+<h2 id="maintenance-rituals">Maintenance Rituals</h2>
+
+<p>Build these into your rhythm:</p>
+
+<h3 id="daily">Daily</h3>
+<ul>
+  <li>Run tests before starting new work</li>
+  <li>Check CI status (address failures quickly)</li>
+  <li>Review yesterday’s PRs (any follow-up needed?)</li>
+</ul>
+
+<h3 id="weekly">Weekly</h3>
+<ul>
+  <li>Dependency updates (security patches)</li>
+  <li>Check issue backlog (anything urgent?)</li>
+  <li>Review metrics (velocity, test coverage, build time)</li>
+</ul>
+
+<h3 id="every-10-15-prs-consolidation">Every 10-15 PRs (Consolidation)</h3>
+<ul>
+  <li>Test coverage audit</li>
+  <li>Documentation refresh</li>
+  <li>Technical debt paydown</li>
+  <li>Reflection and learning capture</li>
+</ul>
+
+<h3 id="monthly">Monthly</h3>
+<ul>
+  <li>VISION alignment check (still on track?)</li>
+  <li>Success criteria review (achieved any? need updates?)</li>
+  <li>Major dependency upgrades (if needed)</li>
+  <li>Performance benchmarking</li>
+</ul>
+
+<h2 id="sustainable-velocity">Sustainable Velocity</h2>
+
+<p>The goal isn’t maximum speed—it’s sustainable speed.</p>
+
+<h3 id="signs-of-unsustainable-pace">Signs of Unsustainable Pace</h3>
+
+<p><strong>Burnout indicators:</strong></p>
+<ul>
+  <li>Every PR feels like a struggle</li>
+  <li>Tests breaking frequently</li>
+  <li>Documentation falling behind</li>
+  <li>Technical debt growing</li>
+</ul>
+
+<p><strong>Quality degradation:</strong></p>
+<ul>
+  <li>Bugs in recent features</li>
+  <li>Flaky tests increasing</li>
+  <li>Regressions in old features</li>
+  <li>Customer complaints up</li>
+</ul>
+
+<p><strong>Process breakdown:</strong></p>
+<ul>
+  <li>Skipping tests “just this once”</li>
+  <li>Merging without review</li>
+  <li>Taking shortcuts on documentation</li>
+  <li>Deferring consolidation</li>
+</ul>
+
+<h3 id="signs-of-sustainable-pace">Signs of Sustainable Pace</h3>
+
+<p><strong>Healthy rhythm:</strong></p>
+<ul>
+  <li>PRs feel productive, not frantic</li>
+  <li>Tests provide confidence</li>
+  <li>Documentation stays current</li>
+  <li>Quality is consistent</li>
+</ul>
+
+<p><strong>Improving over time:</strong></p>
+<ul>
+  <li>Velocity stable or increasing</li>
+  <li>Commits per PR decreasing</li>
+  <li>Technical debt stable or decreasing</li>
+  <li>Team confidence high</li>
+</ul>
+
+<p><strong>Process working:</strong></p>
+<ul>
+  <li>Consolidation happens on schedule</li>
+  <li>Tests catch issues early</li>
+  <li>Documentation helps onboarding</li>
+  <li>Learnings get captured</li>
+</ul>
+
+<h2 id="sharpen-the-saw-checklist">Sharpen the Saw Checklist</h2>
+
+<p>You’re maintaining well when:</p>
+
+<ul>
+  <li>Consolidation happens every 10-15 PRs (not skipped)</li>
+  <li>Test coverage grows with features (not shrinks)</li>
+  <li>Documentation matches reality (not stale)</li>
+  <li>Technical debt is conscious (not surprising)</li>
+  <li>Velocity feels sustainable (not frantic)</li>
+  <li>Learnings get captured (not forgotten)</li>
+</ul>
+
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+
+<h3 id="skipping-consolidation">Skipping Consolidation</h3>
+<p>“We’re on a roll, let’s keep going!”</p>
+
+<p><strong>Result</strong>: Technical debt compounds, velocity drops, quality suffers.</p>
+
+<p><strong>Fix</strong>: Treat consolidation as mandatory, not optional.</p>
+
+<h3 id="premature-optimization">Premature Optimization</h3>
+<p>“This could be faster, let’s refactor!”</p>
+
+<p><strong>Result</strong>: Time spent on non-problems, real issues ignored.</p>
+
+<p><strong>Fix</strong>: Optimize based on evidence (metrics, profiling, user reports).</p>
+
+<h3 id="perfect-code-obsession">Perfect Code Obsession</h3>
+<p>“This needs complete rewrite before we can continue.”</p>
+
+<p><strong>Result</strong>: Endless refactoring, no forward progress.</p>
+
+<p><strong>Fix</strong>: Pay down debt incrementally during consolidation.</p>
+
+<h3 id="documentation-debt">Documentation Debt</h3>
+<p>“We’ll document it when we’re done.”</p>
+
+<p><strong>Result</strong>: Documentation never happens, or is wrong.</p>
+
+<p><strong>Fix</strong>: Small doc updates in consolidation PRs.</p>
+
+<h2 id="example-consolidation-timeline">Example Consolidation Timeline</h2>
+
+<p><strong>dikuclient Phase 2 Consolidation (PR #15):</strong></p>
+
+<p><strong>Before consolidation</strong> (PR #1-14):</p>
+<ul>
+  <li>14 feature PRs merged</li>
+  <li>Test coverage: 45%</li>
+  <li>Some features undocumented</li>
+  <li>One flaky test</li>
+  <li>README outdated</li>
+</ul>
+
+<p><strong>Consolidation PR #15:</strong></p>
+<ol>
+  <li>Added tests for PRs #8, #11, #13 (coverage → 68%)</li>
+  <li>Fixed flaky connection test</li>
+  <li>Updated README with new commands</li>
+  <li>Documented color codes feature</li>
+  <li>Removed deprecated websocket option</li>
+  <li>Ran full test suite on fresh install</li>
+</ol>
+
+<p><strong>Result</strong>: Solid foundation for Phase 3 development</p>
+
+<p><strong>After consolidation</strong> (PR #16-45):</p>
+<ul>
+  <li>Higher velocity (2.8 commits/PR vs 6.3 in Phase 1)</li>
+  <li>Fewer bugs</li>
+  <li>Documentation current</li>
+  <li>Tests reliable</li>
+</ul>
+
+<p><strong>Investment</strong>: 1 consolidation PR enabled 30 faster feature PRs.</p>
+
+<h2 id="whats-next">What’s Next?</h2>
+
+<p>You’ve completed the journey:</p>
+
+<ul>
+  <li><strong><a href="getting-started.html">Getting Started</a></strong>: Foundation (README, VISION, MVP)</li>
+  <li><strong><a href="staying-organized.html">Staying Organized</a></strong>: Design-first development</li>
+  <li><strong><a href="leveling-up.html">Leveling Up</a></strong>: Rapid iteration patterns</li>
+  <li><strong><a href="sharpen-the-saw.html">Sharpen the Saw</a></strong>: Sustainable velocity</li>
+</ul>
+
+<p><strong>Now</strong>: Apply these practices to your projects. Start with Getting Started, progress through each level, and remember—consolidate every 10-15 PRs!</p>
+
+<hr />
+
+<p><small><strong>Evidence sources</strong>: <a href="https://github.com/anicolao/dikuclient">dikuclient</a> PR #15 (consolidation example), <a href="https://github.com/anicolao/DikuMUD">DikuMUD</a> PR #122 (documentation consolidation), <a href="https://github.com/anicolao/morpheum">morpheum</a> test growth trajectory, velocity metrics from all case studies showing sustainable pace.</small></p>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/llmdev/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">LLM Development</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">LLM Development</li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Proven practices for building software with AI assistance</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
