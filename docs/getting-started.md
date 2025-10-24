@@ -7,20 +7,29 @@ title: How To Get Started
 
 When starting a new project with AI assistance, three elements set you up for success: a clear README, a compelling VISION, and a tiny MVP. This foundation enables rapid iteration while maintaining direction.
 
-## 1. Start with a Clear README
+**Proven by evidence:** All 4 analyzed case studies (334+ PRs) used this pattern to achieve 3-11 PRs/day sustained velocity.
 
-Your README is the contract between you and the AI. Make it specific and actionable.
+## 1. Have AI Create a Clear README
 
-### What to Include
+Your README is the contract between you and the AI. Use AI to create it, following this proven structure.
 
-**Required sections:**
-- **Overview**: What this project does (2-3 sentences)
-- **Purpose**: Why it exists and what problem it solves
-- **Installation**: Exact commands to get started
-- **Usage**: Concrete examples of how to use it
-- **Testing**: How to validate it works
+### Prompt AI to Create Your README
 
-**Example from dikuclient:**
+**Prompt template:**
+```markdown
+Create a README.md for a [project type] that [brief description].
+
+Include these sections:
+- Overview: What this project does (2-3 sentences)
+- Purpose: Why it exists and what problem it solves
+- Installation: Exact commands to get started
+- Usage: Concrete examples with actual commands
+- Testing: How to validate it works
+
+Keep it concise and specific. Use [dikuclient example below] as a style guide.
+```
+
+**Example README structure (from dikuclient case study):**
 ```markdown
 # Diku Client
 A MUD client for Diku with modern features
@@ -49,40 +58,27 @@ A clear README gives the AI:
 
 **Evidence**: All 4 analyzed projects started with clear READMEs. Projects with vague READMEs needed more iteration (6+ commits vs 1-3 commits for clear specs).
 
-## 2. Create a Compelling VISION
+## 2. Have AI Create a Compelling VISION
 
-Your VISION document captures the "why" and long-term direction. This prevents the AI from optimizing for the wrong goals.
+Your VISION document captures the "why" and guides long-term direction. Use AI to create it following this proven template.
 
-### Vision Template
+### Prompt AI to Create Your VISION
 
+**Prompt template:**
 ```markdown
-# Vision for [Project Name]
+Create a VISION.md for [project name] that [mission statement].
 
-## The Challenge
-[What problem exists today?]
+Use this structure:
+- The Challenge: What problem exists today
+- Our Mission: What we're building and why
+- Core Principles: 3-4 guiding principles for decisions
+- Success Criteria: 3-5 measurable outcomes
+- Open Questions: What we're still figuring out
 
-## Our Mission
-[What are you building and why?]
-
-## Core Principles
-1. [First principle - what guides decisions]
-2. [Second principle]
-3. [Third principle]
-
-## Success Criteria
-We'll know we're succeeding when:
-- [Measurable outcome 1]
-- [Measurable outcome 2]
-- [Measurable outcome 3]
-
-## Open Questions
-- [What are you still figuring out?]
-- [What trade-offs need consideration?]
+Style it like the llmdev VISION.md example below.
 ```
 
-### Real Example
-
-From the llmdev project VISION.md:
+**Example VISION structure (from llmdev case study):**
 
 ```markdown
 ## Our Mission
@@ -110,17 +106,33 @@ for the entire development community.
 
 **Evidence**: DikuMUD's VISION.md was referenced in 23 of 165 PRs to validate design decisions stayed on track.
 
-## 3. Build a Tiny MVP
+## 3. Have AI Build a Tiny MVP
 
-Don't aim for perfection—build the smallest thing that works and can serve as the kernel for growth.
+Don't aim for perfection—prompt AI to build the smallest thing that works and can serve as the kernel for growth.
+
+### Prompt AI to Create Your MVP
+
+**Prompt template:**
+```markdown
+I've created README.md and VISION.md (see attached files).
+
+Please create a tiny MVP that:
+- Sets up [language/framework] project structure  
+- Implements ONLY [one core feature from README]
+- Has one test that validates it works
+- Can build and run successfully
+
+Make this as minimal as possible—we'll add features incrementally.
+Target: Working in 2-4 hours, not days.
+```
 
 ### MVP Checklist
 
-Your MVP should:
-- [ ] **Build successfully** (even if it does almost nothing)
-- [ ] **Have one test** that validates core functionality
-- [ ] **Be runnable** (can execute and see output)
-- [ ] **Document its limitations** (what it intentionally doesn't do yet)
+AI should create an MVP that:
+- [ ] **Builds successfully** (even if it does almost nothing)
+- [ ] **Has one test** that validates core functionality
+- [ ] **Is runnable** (can execute and see output)
+- [ ] **Documents its limitations** (what it intentionally doesn't do yet)
 
 ### Example MVP Progression
 
@@ -140,8 +152,14 @@ Result: Working prototype in 3 hours. 73 more PRs refined and extended it.
 
 ### Why Tiny Matters
 
-**Cognitive load**: AI works better with small, focused changes
-**Fast feedback**: See results immediately, adjust quickly
+**Evidence from case studies:**
+- **dikuclient**: 3-hour MVP became foundation for 63 PRs
+- **morpheum**: 3-hour MVP (3 PRs) enabled 73 more PRs
+- **Pattern**: Tiny kernel → rapid iteration
+
+**Why this pattern works:**
+- **AI cognitive load**: Works better with small, focused tasks
+- **Fast feedback**: See results immediately, adjust quickly
 **Confidence building**: Early success maintains momentum
 **Foundation**: Everything else builds on this kernel
 
@@ -157,91 +175,107 @@ Result: Working prototype in 3 hours. 73 more PRs refined and extended it.
 
 ## Quick Start Formula
 
-Combine all three elements:
+Use AI to create all three elements following these proven patterns:
 
 ```bash
-# Day 1: Foundation
-1. Write README.md (30 minutes)
-   - What, why, how to install, how to use
-   
-2. Write VISION.md (30 minutes)
-   - Mission, principles, success criteria
-   
-3. Create minimal project structure (1-2 hours)
-   - Initialize project (npm init, poetry init, etc.)
-   - Add basic build/test setup
-   - Create single source file that runs
-   - Write one test that passes
-   
-4. Verify it works (30 minutes)
-   - Build succeeds
-   - Tests pass
-   - Can run and see output
-   
-# Day 2+: Iterate
-5. Add one feature at a time
-6. Test after each feature
-7. Reference README/VISION in prompts
+# Step 1: Have AI Create Foundation (1 hour)
+"Create a README.md for [project] that [description]"
+# Review and refine
+
+"Create a VISION.md for [project] with mission: [statement]"  
+# Review and refine
+
+# Step 2: Have AI Build MVP (2-4 hours)
+"Using the README and VISION, create a tiny MVP that [one feature]"
+# Verify it works
+
+# Step 3: Verify Success (30 minutes)
+- Build succeeds
+- Tests pass
+- Can run and see output
+
+# Step 4: Start Iterating (Day 2+)
+"Looking at README.md and VISION.md, add [next feature]"
+# One feature at a time
+# Reference README/VISION in each prompt
 ```
 
-## Example Prompts
+## Effective Prompts for AI
 
 ### Initial Setup Prompt
+
+Use this pattern (from successful case studies):
+
 ```markdown
-I want to create a [project type] that [does what].
+I want to create a [project type] that [specific purpose].
 
-I've written a README.md with the overview and a VISION.md 
-with our mission. Please help me create a tiny MVP that:
+Please create:
+1. README.md with overview, purpose, installation, usage
+2. VISION.md with mission, principles, success criteria
+3. A tiny MVP in [language/framework] that:
+   - Implements just [ONE core feature]
+   - Has one test
+   - Builds and runs
 
-1. Sets up the project structure ([language/framework])
-2. Implements just [one core feature]
-3. Has one test that validates it works
-4. Can build and run successfully
-
-Make this as small as possible - we'll add features incrementally.
+Make everything as minimal as possible - we'll iterate.
+Style: professional, concise, actionable.
 ```
 
 ### Feature Addition Prompt
+
+Once you have the foundation:
+
 ```markdown
 Looking at our README.md and VISION.md, I want to add [feature].
 
-This should:
-- [Specific requirement 1]
-- [Specific requirement 2]
-- Stay aligned with our vision of [reference vision]
+Requirements:
+- [Specific requirement 1 with example]
+- [Specific requirement 2 with example]
 
-Please make minimal changes to implement this.
+Constraints:
+- Make changes as small as possible
+- Maintain backward compatibility
+- Stay aligned with our vision
+
+Success criteria:
+- [ ] [Testable outcome]
+- [ ] All existing tests pass
 ```
 
-## Success Metrics
+## Success Metrics (from Case Studies)
 
 You're on track if:
 
-- README takes 30 minutes to write (not days)
-- VISION fits on one page (not a book)
-- MVP works within 2-4 hours (not weeks)
-- First 3 PRs complete in one day (not spread over weeks)
-- You can show someone working software on day 1
+- AI creates README in one prompt (with minor refinement)
+- AI creates VISION in one prompt (with minor refinement)
+- AI creates working MVP in 2-4 hours (1-3 prompts)
+- First 3 PRs complete in one day
+- You can demo working software on day 1
 
-**Evidence**: All analyzed projects that followed this pattern achieved 3-11 PRs/day sustained velocity.
+**Evidence**: All analyzed projects that used this pattern achieved 3-11 PRs/day sustained velocity with 1-3 commits per PR.
 
-## Common Pitfalls
+## Common Pitfalls (from Case Studies)
 
 ### Starting Without Documentation
-"I'll document it later" leads to:
-- AI making wrong assumptions
-- Inconsistent direction
-- More iteration (3-5x more commits)
+**Anti-pattern**: "I'll just start coding and document later"
 
-### Perfectionism in MVP
-"It needs [long list] before it's ready" results in:
-- Analysis paralysis
-- Never shipping
-- Lost momentum
+**Result**: AI makes wrong assumptions, inconsistent direction, 3-5x more iteration
 
-### Vague Vision
-"Build a good project" doesn't guide decisions.
-AI will optimize for wrong goals.
+**Fix**: Use AI to create README + VISION first (1 hour total), then build
+
+### Asking AI for Too Much at Once
+**Anti-pattern**: "Build a complete system with X, Y, and Z"
+
+**Result**: Analysis paralysis, overwhelming scope, weeks before first working code
+
+**Fix**: Follow morpheum's 3-hour MVP pattern—one core feature, then iterate
+
+### Vague Prompts to AI
+**Anti-pattern**: "Build a good project" or "Make it better"
+
+**Result**: AI optimizes for wrong goals, requires many iterations
+
+**Fix**: Use specific prompts with examples, constraints, and success criteria
 
 ## What's Next?
 
