@@ -13,24 +13,31 @@ As projects grow beyond the initial MVP, organization becomes critical. The key 
 
 When facing a complex feature, prompt AI to evaluate at least two different implementation approaches before coding.
 
-### Prompt Template for Design Analysis
+### How to Prompt for Design Analysis
 
+Focus on **describing the problem clearly**, not telling AI how to structure analysis (it knows how).
+
+**What to include in your prompt:**
+- **The problem**: What needs to be solved
+- **Constraints**: What limits your options
+- **Context**: Why this matters
+- **Request**: "analyze alternatives and recommend"
+
+**Example from dikuclient:**
 ```markdown
-I need to implement [feature] that [specific requirement].
+"We need to handle ANSI color codes from the MUD server.
 
-Before implementing, please analyze at least 2 different 
-approaches to solve this:
-
-For each alternative:
-1. Describe the approach
-2. List pros and cons
-3. Estimate complexity (small/medium/large)
-4. Identify risks or unknowns
-
-After analysis, recommend which approach and explain why.
-
-Consider: maintainability, performance, complexity, time to implement
+Context: Terminal output with escape sequences
+Constraint: Keep it simple for MVP, we can enhance later
+Request: Analyze 2-3 approaches and recommend one"
 ```
+
+**What AI does automatically** (you don't need to specify):
+- Generates alternative approaches
+- Lists pros/cons for each
+- Estimates complexity
+- Recommends best option
+- Explains rationale
 
 ### Why This Pattern Works
 
@@ -149,61 +156,51 @@ When AI recommends full design analysis, use this template:
 
 Give this template to AI and have it fill it out before coding.
 
-## Prompts for Design-First Development
+## Real-World Prompt Patterns
 
-### Generate Alternatives Prompt
+### Pattern 1: Problem Description
 
+From DikuMUD PR #119 (zone validation):
 ```markdown
-I need to implement [feature] that [specific requirement].
+"3D room layouts have consistency errors - 35 found manually.
 
-Before implementing, please analyze at least 2 different 
-approaches to solve this:
+Problem: Manual validation doesn't scale
+Context: Spatial relationships in MUD zones
+Need: Automated validation that catches all errors
 
-For each alternative:
-1. Describe the approach
-2. List pros and cons
-3. Estimate complexity (small/medium/large)
-4. Identify risks or unknowns
-
-After analysis, recommend which approach and explain why.
-
-Consider:
-- Maintainability
-- Performance  
-- Complexity
-- Time to implement
+Analyze approaches and recommend one"
 ```
 
-### Design Doc Review Prompt
+**Why it worked:** Clear problem, specific context, focused request. AI proposed BFS-based graph validator.
 
+### Pattern 2: Integration Challenge
+
+From morpheum PR #10 (Copilot integration):
 ```markdown
-I've written a design doc for [feature] (see [file/issue]).
+"Need to integrate Copilot provider alongside OpenAI.
 
-Please review and:
-1. Identify any missed alternatives worth considering
-2. Point out unstated assumptions
-3. Highlight potential risks in recommended approach
-4. Suggest improvements to the implementation plan
+Context: We have LLMClient interface from PR #2
+Requirement: Same interface, add streaming support
+Constraint: Minimal changes to existing code
 
-Don't implement anything yet—focus on design quality.
+Analyze how to add this cleanly"
 ```
 
-### Implementation from Design Prompt
+**Why it worked:** Referenced existing code, stated constraints. Result: 1 commit, 1h 18m.
 
+### Pattern 3: Implementation from Design
+
+Once design is chosen:
 ```markdown
-Following the design in [file/issue], please implement 
-Alternative [N]: [name].
+"Implement the BFS-based validator from the design analysis.
 
-Implementation plan from design:
-1. [Step 1]
-2. [Step 2]
-3. [Step 3]
+Focus on: Finding all connectivity errors
+Test: Should catch the 35 known errors
 
-Remember to:
-- Follow the design exactly
-- Add tests as specified in success criteria
-- Mark anything deferred to future work with TODO
+Keep it simple for now - enhancements later"
 ```
+
+**Key**: Focus on WHAT (problem, context, constraints) not HOW (AI handles analysis structure).
 
 ## Organization Patterns
 
