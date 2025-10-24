@@ -40,115 +40,32 @@ Some features naturally take 6-15 commits with AI. This is normal for:
 
 **Pattern**: High iteration on foundations → Low iteration on features
 
-## Problem-Context-Constraint Pattern
+## Proven Patterns from Case Studies
 
-**The key**: Be specific about the problem, give context, state constraints. AI handles the rest.
+### dikuclient: Foundation → Features
 
-### Real Example: dikuclient PR #54 (3 commits, <8 hours)
+PR #3 took 15 commits building networking foundation. Every subsequent networking feature took 1-3 commits because AI had the foundation to work from.
 
-**What the developer wrote:**
-```markdown
-"Color codes display as garbage in the terminal.
+**Pattern**: High iteration on foundations → Low iteration on features
 
-Cause: ANSI escape sequences aren't being parsed
-Impact: Terminal output unreadable for users
-Constraint: Keep it simple - just basic colors for now, we can enhance later
+### morpheum PR #10: Interface-Based Design
 
-Fix this with minimal changes"
-```
+morpheum added Copilot provider integration in 1 commit (1h 18m) because it built on the LLMClient interface established in PR #2.
 
-**Why this worked:**
-- Specific problem ("display as garbage")
-- Clear cause (ANSI escape sequences)
-- Stated constraint (simple, basic colors only)
-- Result: 3 commits, done quickly
+**Key insight**: When interfaces are well-designed, adding implementations is fast.
 
-### Real Example: morpheum PR #10 (1 commit, 1h 18m)
+See [morpheum case study](https://github.com/anicolao/llmdev/blob/main/case_studies/GITHUB_ANICOLAO_MORPHEUM.md) and [dikuclient case study](https://github.com/anicolao/llmdev/blob/main/case_studies/GITHUB_ANICOLAO_DIKUCLIENT.md) for detailed analysis.
 
-**What the developer wrote:**
-```markdown
-"Integrate Copilot provider alongside existing OpenAI provider.
+### What the Case Studies Show
 
-Context: We have LLMClient interface from PR #2
-Need: Same interface pattern, add streaming support
-Constraint: Minimal changes to existing code
+Successful prompts are:
+1. **Specific** about what needs to be done
+2. **Constrained** (minimal changes, specific scope)
+3. **Contextual** (reference existing code/interfaces)
 
-Implement this cleanly"
-```
+Review the prompt analysis sections in the [case studies](https://github.com/anicolao/llmdev/tree/main/case_studies) to see real examples of effective prompts.
 
-**Why this worked:**
-- Referenced existing code (LLMClient interface)
-- Specific need (streaming support)
-- Clear constraint (minimal changes)
-- Result: 1 commit, 78 minutes
-
-### The Pattern
-
-**Write prompts that include:**
-1. **Specific problem/feature** ("Color codes display as garbage")
-2. **Context** (why/where/impact)
-3. **Constraints** ("minimal changes", "keep it simple")
-4. **Reference points** (existing code, files, interfaces)
-
-**Don't write:**
-- ❌ "Fix the color issue" (too vague)
-- ❌ Long detailed specs about how AI should structure the fix
-- ❌ Step-by-step implementation instructions
-
-AI figures out the approach when you give clear problem + context + constraints.
-
-### Constraint Patterns That Work
-
-**Size constraints:**
-- "as small as possible"
-- "at most 3 files"
-- "under 50 lines changed"
-
-**Scope constraints:**
-- "only affect [specific module]"
-- "don't change existing behavior"
-- "maintain current API"
-
-**Quality constraints:**
-- "add test that fails first"
-- "include example usage"
-- "update documentation"
-
-**Verification constraints:**
-- "`git grep [pattern]` should find nothing"
-- "all tests must pass"
-- "benchmark must stay under [X]ms"
-
-## Test-First Development
-
-Don't just add tests—use them to drive development.
-
-### The Test → Implement → Validate Cycle
-
-```bash
-# 1. Write the test (shows what you want)
-def test_connection_handles_timeout():
-    client = Client(timeout=1)
-    with pytest.raises(TimeoutError):
-        client.connect("slow.server.example.com")
-        
-# 2. Run it (should fail)
-$ pytest tests/test_client.py::test_connection_handles_timeout
-# FAILED - TimeoutError not raised
-
-# 3. Implement minimal fix
-# (AI implements timeout handling)
-
-# 4. Run again (should pass)
-$ pytest tests/test_client.py::test_connection_handles_timeout  
-# PASSED
-
-# 5. Run all tests (ensure no regression)
-$ pytest
-# 51 passed
-```
-
-### Test Growth Patterns
+## Test Growth from Case Studies
 
 **Healthy pattern**: Tests grow alongside features
 
@@ -156,226 +73,36 @@ $ pytest
 - dikuclient: PR #15 consolidated with test additions
 - DikuMUD: 100+ integration tests validate all changes
 
-**Anti-pattern**: Test debt accumulation
-
-- Features added without tests
-- "I'll add tests later" (never happens)
-- Flaky tests ignored
-- Coverage drops over time
-
-### How to Prompt for Test-First Development
-
-**Focus on the behavior you want**, not the test structure (AI knows TDD).
-
-**Good prompt:**
-```markdown
-"Add timeout handling to Client.connect().
-
-Desired behavior: Should raise TimeoutError after 1 second on slow connections
-Test scenario: Connect to slow.server.example.com with timeout=1
-
-Use test-first: write failing test, then implement"
-```
-
-**Why it works:**
-- Specific behavior (raise TimeoutError after 1 second)
-- Concrete scenario (slow.server.example.com)
-- Mentions TDD but doesn't dictate test structure
-- AI writes the test automatically
+See the [case studies](https://github.com/anicolao/llmdev/tree/main/case_studies) for detailed test growth patterns and coverage metrics.
 
 ## Plan for Refinement Cycles
 
 Major features need follow-up PRs. Budget for them upfront.
 
-### The 1 + 2-3 Pattern
+### Real Example: dikuclient networking
 
-**Initial PR**: Core functionality, "good enough to iterate"
-**Follow-up PRs**: Edge cases, polish, integration
-
-**Example: dikuclient networking**
 - PR #3: Foundation (15 commits - complex)
-- PR #6: Handle disconnection edge case (2 commits)
-- PR #7: Add reconnection logic (3 commits)
-- PR #8: Improve error messages (1 commit)
+- Subsequent networking features: 1-3 commits each
 
-**Example: morpheum WebSocket**
-- PR #128: Basic WebSocket support (complex)
-- Multiple follow-up PRs: Stability, error handling, edge cases
+**Pattern**: Initial foundation work is complex, but subsequent features building on that foundation are fast.
 
-### How to Budget Refinement
+See [dikuclient case study](https://github.com/anicolao/llmdev/blob/main/case_studies/GITHUB_ANICOLAO_DIKUCLIENT.md) for analysis of iteration patterns.
 
-When planning a major feature:
+## Advanced Patterns from Case Studies
 
-```markdown
-Phase 1 (PR #N): Core implementation
-- [ ] Basic happy path works
-- [ ] Key test passes
-- [ ] Documented in README
+### Interface-First Architecture (morpheum)
 
-Phase 2 (PR #N+1): Edge cases  
-- [ ] Handle error condition X
-- [ ] Handle error condition Y
-- [ ] Add integration test
+morpheum added 4 providers in 1-2 hours each because the LLMClient interface was designed first. See [morpheum case study](https://github.com/anicolao/llmdev/blob/main/case_studies/GITHUB_ANICOLAO_MORPHEUM.md) for details.
 
-Phase 3 (PR #N+2): Polish
-- [ ] Improve error messages
-- [ ] Add examples
-- [ ] Performance optimization
-```
+**Result**: 76 PRs with zero breaking changes.
 
-**Key insight**: Declaring refinement phases upfront prevents the feeling of "this feature keeps having problems." It's not problems—it's planned iteration.
+### Validation Tools (DikuMUD)
 
-## Advanced Patterns
+DikuMUD PR #119 built a BFS-based graph validator that automatically found 35 geometry errors in 3D room layouts. See [DikuMUD case study](https://github.com/anicolao/llmdev/blob/main/case_studies/GITHUB_ANICOLAO_DIKUMUD.md) for analysis.
 
-### 1. Interface-First Architecture
+### Git Bisect for Debugging (DikuMUD)
 
-**Pattern**: Design interfaces before implementations
-
-```typescript
-// Step 1: Define interface (PR #1)
-interface LLMClient {
-  send(prompt: string): Promise<string>;
-}
-
-// Step 2: First implementation (PR #2)  
-class OpenAIClient implements LLMClient {
-  async send(prompt: string) {
-    // Implementation
-  }
-}
-
-// Step 3: Add providers easily (PR #7, #15, #23)
-class AnthropicClient implements LLMClient { ... }
-class OllamaClient implements LLMClient { ... }
-```
-
-**Impact**: morpheum added 4 providers in 1-2 hours each because interface was designed first.
-
-**When to use**: Multiple implementations expected, variation points identified early.
-
-### 2. Progressive Enhancement
-
-**Pattern**: Extend interfaces without breaking existing code
-
-```typescript
-// V1: Basic functionality
-interface Service {
-  process(data: string): Promise<Result>;
-}
-
-// V2: Add optional enhancement
-interface Service {
-  process(data: string): Promise<Result>;
-  processStreaming?(data: string, callback: (chunk: string) => void): Promise<Result>;
-}
-```
-
-**Impact**: morpheum had 76 PRs with zero breaking changes.
-
-**When to use**: Extending existing functionality, maintaining backward compatibility critical.
-
-### 3. Validation Tools for Domain Problems
-
-**Pattern**: Build tools to check consistency automatically
-
-**Example: DikuMUD Zone Validator (PR #119)**
-- Problem: 3D room layouts had 35 geometry errors
-- Solution: BFS-based graph validator
-- Result: Found all errors automatically, enabled incremental fixing
-
-**When to use**: 
-- Spatial reasoning required
-- Complex state validation
-- Multi-file consistency checks
-- Domain rules hard to keep in head
-
-**Template**:
-```python
-def validate_domain_rules(data):
-    """Run all validation checks"""
-    errors = []
-    errors.extend(check_consistency(data))
-    errors.extend(check_completeness(data))
-    errors.extend(check_references(data))
-    return errors
-
-# Use in tests
-def test_domain_validation():
-    data = load_production_data()
-    errors = validate_domain_rules(data)
-    assert len(errors) == 0, f"Found {len(errors)} errors: {errors}"
-```
-
-### 4. Git Bisect for Regressions
-
-**Pattern**: Automate finding which commit broke something
-
-```bash
-# Something broke, but not sure when
-git bisect start
-
-# Current version is broken  
-git bisect bad
-
-# Version from 2 weeks ago worked
-git bisect good HEAD~50
-
-# Git will checkout middle commit, you test
-npm test
-git bisect good  # if tests pass
-# or
-git bisect bad   # if tests fail
-
-# Repeat until git identifies exact commit
-# Usually takes log2(N) steps
-```
-
-**Example**: DikuMUD PR #132 used bisect to find that PR #129 caused quest giver visibility bug.
-
-**Impact**: Fast root cause identification even across many commits.
-
-### 5. Incremental Validation Pattern
-
-**Pattern**: Fix-validate-fix cycles with explicit checking
-
-```markdown
-Prompt: Fix errors one by one, validating after each fix
-
-Process:
-1. Run validator → 34 errors
-2. Fix error #1
-3. Run validator → 32 errors (validate #1 actually fixed)
-4. Fix error #2  
-5. Run validator → 30 errors
-...
-N. Run validator → 0 errors
-```
-
-**Impact**: DikuMUD PR #120 went from 34→32→30→9→0 errors systematically. Tracks progress objectively, prevents regression.
-
-### 6. Checklist-Driven Work
-
-**Pattern**: Include task checklists in PR descriptions
-
-```markdown
-PR Description:
-
-Complex feature with multiple steps:
-
-- [x] Explore repository structure
-- [x] Run existing tests to understand baseline
-- [x] Implement core functionality
-- [x] Add unit tests for core
-- [ ] Add integration tests
-- [ ] Update documentation  
-- [ ] Add example usage
-```
-
-**Benefits**:
-- Shows progress
-- Enables resume after interruptions
-- Helps AI stay organized
-- Makes PR reviews easier
+DikuMUD PR #132 used git bisect to identify that PR #129 caused a quest giver visibility bug. See case study for details.
 
 ## Velocity Metrics
 
@@ -426,27 +153,15 @@ You've leveled up when:
 - Complex features decompose into clear phases
 - Velocity feels sustainable (not frantic)
 
-## Common Advanced Pitfalls
+## Key Insights
 
-### Optimizing Too Early
-Building interfaces for flexibility you don't need yet.
+Velocity is the outcome of good practices, not a goal itself. The case studies show:
 
-**Fix**: Add abstraction when you have 2-3 concrete examples, not speculatively.
+- 80% of PRs in 1-3 commits when foundation is solid
+- Test coverage growing with features, not shrinking
+- Complex features decomposed into clear phases
 
-### Skipping Refinement Budget
-Assuming features are "done" after initial PR.
-
-**Fix**: Explicitly plan for 2-3 follow-up PRs on complex features.
-
-### Chasing Velocity Metrics
-Doing 10 trivial PRs to hit "10 PRs/day" target.
-
-**Fix**: Velocity is outcome of good practices, not the goal itself.
-
-### Test Debt Accumulation
-Moving fast by skipping tests.
-
-**Fix**: Speed comes from fast feedback, which requires tests.
+See the [case studies](https://github.com/anicolao/llmdev/tree/main/case_studies) for detailed velocity analysis.
 
 ## What's Next?
 
