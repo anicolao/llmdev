@@ -61,8 +61,9 @@ Common issues:
 ### Styling Not Applied
 
 If pages load but look unstyled:
-- Verify `baseurl: "/llmdev"` in `_config.yml` matches repository name
-- Check `assets/css/style.scss` exists
+- If using custom domain: Verify `baseurl: ""` and `url` matches custom domain in `_config.yml`
+- If using GitHub Pages default URL: Verify `baseurl: "/llmdev"` matches repository name in `_config.yml`
+- Check `assets/main.scss` exists and has proper front matter (`---` at top)
 - Check browser console for CSS 404 errors
 
 ### 404 on Navigation Links
@@ -99,11 +100,22 @@ GitHub Pages automatically deploys on every push to main branch.
 3. GitHub Actions automatically rebuilds site
 4. Changes appear at `https://anicolao.github.io/llmdev/` within 1-2 minutes
 
-## Custom Domain (Optional)
+## Custom Domain
 
-To use a custom domain:
+This site is currently configured to use a custom domain: `llmdev.morpheum.dev`
 
-1. Add `CNAME` file to `docs/` directory:
+The custom domain is configured with:
+1. `CNAME` file in `docs/` directory containing: `llmdev.morpheum.dev`
+2. DNS CNAME record: `llmdev` → `anicolao.github.io`
+3. Updated `_config.yml`:
+   ```yaml
+   url: "https://llmdev.morpheum.dev"
+   baseurl: ""
+   ```
+
+### To Use a Different Custom Domain:
+
+1. Update `CNAME` file to `docs/` directory:
    ```
    llmdev.example.com
    ```
@@ -119,6 +131,16 @@ To use a custom domain:
    ```
 
 4. Enable HTTPS in GitHub settings
+
+### To Revert to GitHub Pages Default URL:
+
+Update `_config.yml`:
+```yaml
+url: "https://anicolao.github.io"
+baseurl: "/llmdev"
+```
+
+And remove the `CNAME` file.
 
 See [GitHub Pages custom domain docs](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site) for details.
 
