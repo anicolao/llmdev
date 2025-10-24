@@ -1,8 +1,8 @@
 # GitHub Pages configuration for LLM Development site
 title: LLM Development
 description: Proven practices for building software with AI assistance
-baseurl: "/llmdev"
-url: "https://anicolao.github.io"
+baseurl: ""
+url: "https://llmdev.morpheum.dev"
 
 # Build settings
 theme: minima

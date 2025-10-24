@@ -14,8 +14,7 @@ docs/
 ├── sharpen-the-saw.md      # How To Sharpen the Saw
 ├── about.md                # About the site and methodology
 └── assets/
-    └── css/
-        └── style.scss      # Custom styling
+    └── main.scss           # Custom styling (minima theme override)
 ```
 
 ## Local Development
@@ -40,21 +39,27 @@ bundle install
 # Serve locally
 bundle exec jekyll serve
 
-# Open http://localhost:4000/llmdev/ in your browser
+# Open http://localhost:4000/ in your browser
+# Note: For custom domain setup, baseurl is "" (empty)
+# For GitHub Pages default URL, it would be http://localhost:4000/llmdev/
 ```
 
 ## Deployment
 
 GitHub Pages automatically builds and deploys this site when changes are pushed to the main branch.
 
-**Configuration needed in GitHub repository settings:**
+**This site uses a custom domain:** `https://llmdev.morpheum.dev`
+
+**Configuration in GitHub repository settings:**
 1. Go to Settings → Pages
 2. Set Source to "Deploy from a branch"
 3. Select branch: main
 4. Select folder: /docs
-5. Save
+5. Custom domain: llmdev.morpheum.dev
+6. Enforce HTTPS: enabled
 
-The site will be available at: `https://anicolao.github.io/llmdev/`
+For setup without custom domain, the site would be available at: `https://anicolao.github.io/llmdev/`
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed configuration instructions.
 
 ## Content Guidelines
 
