@@ -60,7 +60,9 @@ This site was built using its own methodology:
 3. **Tiny MVP**: Built a minimal working kernel (phased instruction approach)
 4. **Iterative Refinement**: Enhanced through real-world use and feedback
 
-The content you see here comes from the [llmdev project](https://github.com/anicolao/llmdev)—tools for analyzing LLM-assisted development patterns.
+The content comes from the [llmdev project](https://github.com/anicolao/llmdev)—tools for analyzing LLM-assisted development patterns.
+
+**[Learn more about how this site was built →](about.html)**
 
 ## Get Started
 
