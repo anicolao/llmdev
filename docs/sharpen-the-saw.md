@@ -77,11 +77,11 @@ Tests should grow with features, but occasionally need focused attention.
 ### Test Debt Indicators
 
 You have test debt when:
-- ❌ Coverage is decreasing
-- ❌ Tests are flaky (pass/fail inconsistently)
-- ❌ Tests take too long to run
-- ❌ Tests don't catch real bugs
-- ❌ Tests are brittle (break on unrelated changes)
+- Coverage is decreasing
+- Tests are flaky (pass/fail inconsistently)
+- Tests take too long to run
+- Tests don't catch real bugs
+- Tests are brittle (break on unrelated changes)
 
 ### Test Consolidation Checklist
 
@@ -181,10 +181,10 @@ def slow_but_working(data):
 ```
 
 You know:
-- ✅ What the debt is
-- ✅ Why you took it on
-- ✅ What triggers paydown
-- ✅ How to fix it
+- What the debt is
+- Why you took it on
+- What triggers paydown
+- How to fix it
 
 **Unconscious debt** (dangerous):
 - Code that's confusing but "works"
@@ -346,26 +346,26 @@ Format findings as:
 Build these into your rhythm:
 
 ### Daily
-- ✅ Run tests before starting new work
-- ✅ Check CI status (address failures quickly)
-- ✅ Review yesterday's PRs (any follow-up needed?)
+- Run tests before starting new work
+- Check CI status (address failures quickly)
+- Review yesterday's PRs (any follow-up needed?)
 
 ### Weekly
-- ✅ Dependency updates (security patches)
-- ✅ Check issue backlog (anything urgent?)
-- ✅ Review metrics (velocity, test coverage, build time)
+- Dependency updates (security patches)
+- Check issue backlog (anything urgent?)
+- Review metrics (velocity, test coverage, build time)
 
 ### Every 10-15 PRs (Consolidation)
-- ✅ Test coverage audit
-- ✅ Documentation refresh
-- ✅ Technical debt paydown
-- ✅ Reflection and learning capture
+- Test coverage audit
+- Documentation refresh
+- Technical debt paydown
+- Reflection and learning capture
 
 ### Monthly
-- ✅ VISION alignment check (still on track?)
-- ✅ Success criteria review (achieved any? need updates?)
-- ✅ Major dependency upgrades (if needed)
-- ✅ Performance benchmarking
+- VISION alignment check (still on track?)
+- Success criteria review (achieved any? need updates?)
+- Major dependency upgrades (if needed)
+- Performance benchmarking
 
 ## Sustainable Velocity
 
@@ -373,19 +373,19 @@ The goal isn't maximum speed—it's sustainable speed.
 
 ### Signs of Unsustainable Pace
 
-❌ **Burnout indicators:**
+**Burnout indicators:**
 - Every PR feels like a struggle
 - Tests breaking frequently
 - Documentation falling behind
 - Technical debt growing
 
-❌ **Quality degradation:**
+**Quality degradation:**
 - Bugs in recent features
 - Flaky tests increasing
 - Regressions in old features
 - Customer complaints up
 
-❌ **Process breakdown:**
+**Process breakdown:**
 - Skipping tests "just this once"
 - Merging without review
 - Taking shortcuts on documentation
@@ -393,19 +393,19 @@ The goal isn't maximum speed—it's sustainable speed.
 
 ### Signs of Sustainable Pace
 
-✅ **Healthy rhythm:**
+**Healthy rhythm:**
 - PRs feel productive, not frantic
 - Tests provide confidence
 - Documentation stays current
 - Quality is consistent
 
-✅ **Improving over time:**
+**Improving over time:**
 - Velocity stable or increasing
 - Commits per PR decreasing
 - Technical debt stable or decreasing
 - Team confidence high
 
-✅ **Process working:**
+**Process working:**
 - Consolidation happens on schedule
 - Tests catch issues early
 - Documentation helps onboarding
@@ -415,37 +415,37 @@ The goal isn't maximum speed—it's sustainable speed.
 
 You're maintaining well when:
 
-- ✅ Consolidation happens every 10-15 PRs (not skipped)
-- ✅ Test coverage grows with features (not shrinks)
-- ✅ Documentation matches reality (not stale)
-- ✅ Technical debt is conscious (not surprising)
-- ✅ Velocity feels sustainable (not frantic)
-- ✅ Learnings get captured (not forgotten)
+- Consolidation happens every 10-15 PRs (not skipped)
+- Test coverage grows with features (not shrinks)
+- Documentation matches reality (not stale)
+- Technical debt is conscious (not surprising)
+- Velocity feels sustainable (not frantic)
+- Learnings get captured (not forgotten)
 
 ## Common Pitfalls
 
-### ❌ Skipping Consolidation
+### Skipping Consolidation
 "We're on a roll, let's keep going!"
 
 **Result**: Technical debt compounds, velocity drops, quality suffers.
 
 **Fix**: Treat consolidation as mandatory, not optional.
 
-### ❌ Premature Optimization
+### Premature Optimization
 "This could be faster, let's refactor!"
 
 **Result**: Time spent on non-problems, real issues ignored.
 
 **Fix**: Optimize based on evidence (metrics, profiling, user reports).
 
-### ❌ Perfect Code Obsession
+### Perfect Code Obsession
 "This needs complete rewrite before we can continue."
 
 **Result**: Endless refactoring, no forward progress.
 
 **Fix**: Pay down debt incrementally during consolidation.
 
-### ❌ Documentation Debt
+### Documentation Debt
 "We'll document it when we're done."
 
 **Result**: Documentation never happens, or is wrong.
@@ -485,10 +485,10 @@ You're maintaining well when:
 
 You've completed the journey:
 
-- ✅ **[Getting Started](getting-started.html)**: Foundation (README, VISION, MVP)
-- ✅ **[Staying Organized](staying-organized.html)**: Design-first development
-- ✅ **[Leveling Up](leveling-up.html)**: Rapid iteration patterns
-- ✅ **[Sharpen the Saw](sharpen-the-saw.html)**: Sustainable velocity
+- **[Getting Started](getting-started.html)**: Foundation (README, VISION, MVP)
+- **[Staying Organized](staying-organized.html)**: Design-first development
+- **[Leveling Up](leveling-up.html)**: Rapid iteration patterns
+- **[Sharpen the Saw](sharpen-the-saw.html)**: Sustainable velocity
 
 **Now**: Apply these practices to your projects. Start with Getting Started, progress through each level, and remember—consolidate every 10-15 PRs!
 

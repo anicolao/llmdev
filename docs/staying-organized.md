@@ -33,10 +33,10 @@ Always generate at least two credible alternatives before implementing.
 ### What Makes an Alternative "Credible"?
 
 Each option should:
-- ✅ Actually solve the stated problem
-- ✅ Have clear pros and cons
-- ✅ Be implementable with available tools/skills
-- ✅ Differ meaningfully from other options (not just minor variations)
+- Actually solve the stated problem
+- Have clear pros and cons
+- Be implementable with available tools/skills
+- Differ meaningfully from other options (not just minor variations)
 
 ### Example: dikuclient Color Support
 
@@ -122,7 +122,7 @@ Not every feature needs deep analysis. Use this decision tree:
 
 **Action**: Write prompt and implement directly (1-2 commits expected)
 
-### 📋 Light Design (Issue Description)
+### Light Design (Issue Description)
 - New feature with one clear approach
 - Moderate complexity
 - Affects 2-3 files
@@ -313,31 +313,31 @@ Use this checklist before starting complex work:
 
 You're organized if:
 
-- ✅ Complex features take 1 design PR + 1-2 implementation PRs
-- ✅ 80% of PRs have clear requirements (not discovered during implementation)
-- ✅ Architectural changes happen through design first (not refactoring later)
-- ✅ You can explain why you chose this approach over alternatives
+- Complex features take 1 design PR + 1-2 implementation PRs
+- 80% of PRs have clear requirements (not discovered during implementation)
+- Architectural changes happen through design first (not refactoring later)
+- You can explain why you chose this approach over alternatives
 
 **Evidence**: Projects with design-first approach averaged 3 commits/PR. Projects without averaged 6-8 commits/PR (double the iteration).
 
 ## Common Pitfalls
 
-### ❌ Analysis Paralysis
+### Analysis Paralysis
 Spending days on design docs for simple features.
 
 **Fix**: Use decision tree above. Most features are "quick implementation."
 
-### ❌ False Alternatives
+### False Alternatives
 "Alternative 1: Do it. Alternative 2: Don't do it."
 
 **Fix**: Alternatives should be different implementation approaches, not whether to implement.
 
-### ❌ Choosing Favorites
+### Choosing Favorites
 Already decided, then manufacturing alternatives to justify it.
 
 **Fix**: Generate alternatives before deciding. You might be surprised which is actually best.
 
-### ❌ Ignoring Design
+### Ignoring Design
 "Let's just start coding and see what happens."
 
 **Fix**: Code-first works for MVP, but design-first prevents rework for complex features.

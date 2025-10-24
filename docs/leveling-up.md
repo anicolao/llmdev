@@ -412,31 +412,31 @@ Velocity increased as foundation solidified.
 
 You've leveled up when:
 
-- ✅ 80% of PRs complete in 1-3 commits
-- ✅ You write specific, constrained prompts naturally
-- ✅ Tests drive development, not follow it
-- ✅ You budget for refinement cycles upfront
-- ✅ Complex features decompose into clear phases
-- ✅ Velocity feels sustainable (not frantic)
+- 80% of PRs complete in 1-3 commits
+- You write specific, constrained prompts naturally
+- Tests drive development, not follow it
+- You budget for refinement cycles upfront
+- Complex features decompose into clear phases
+- Velocity feels sustainable (not frantic)
 
 ## Common Advanced Pitfalls
 
-### ❌ Optimizing Too Early
+### Optimizing Too Early
 Building interfaces for flexibility you don't need yet.
 
 **Fix**: Add abstraction when you have 2-3 concrete examples, not speculatively.
 
-### ❌ Skipping Refinement Budget
+### Skipping Refinement Budget
 Assuming features are "done" after initial PR.
 
 **Fix**: Explicitly plan for 2-3 follow-up PRs on complex features.
 
-### ❌ Chasing Velocity Metrics
+### Chasing Velocity Metrics
 Doing 10 trivial PRs to hit "10 PRs/day" target.
 
 **Fix**: Velocity is outcome of good practices, not the goal itself.
 
-### ❌ Test Debt Accumulation
+### Test Debt Accumulation
 Moving fast by skipping tests.
 
 **Fix**: Speed comes from fast feedback, which requires tests.
