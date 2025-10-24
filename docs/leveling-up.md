@@ -40,57 +40,62 @@ Some features naturally take 6-15 commits with AI. This is normal for:
 
 **Pattern**: High iteration on foundations → Low iteration on features
 
-## The Problem-Context-Solution Prompt Structure
+## Problem-Context-Constraint Pattern
 
+**The key**: Be specific about the problem, give context, state constraints. AI handles the rest.
+
+### Real Example: dikuclient PR #54 (3 commits, <8 hours)
+
+**What the developer wrote:**
 ```markdown
-## Problem
-[One specific issue, with example]
+"Color codes display as garbage in the terminal.
 
-The connection drops when [exact scenario].
-Example error: [actual error message]
+Cause: ANSI escape sequences aren't being parsed
+Impact: Terminal output unreadable for users
+Constraint: Keep it simple - just basic colors for now, we can enhance later
 
-## Context  
-[Why it matters, what it affects]
-
-This affects users who [specific use case].
-It's related to [relevant code/architecture].
-
-## Solution
-[What to do, with constraints]
-
-Fix by [approach], making changes as small as possible.
-
-Constraints:
-- Change at most [N] files
-- Don't modify [existing functionality]
-- Maintain backward compatibility
-
-## Success Criteria
-[How to verify it works]
-
-- [ ] Error no longer occurs when [scenario]
-- [ ] Existing tests still pass
-- [ ] Add test that reproduces original issue
+Fix this with minimal changes"
 ```
 
-### Real Examples
+**Why this worked:**
+- Specific problem ("display as garbage")
+- Clear cause (ANSI escape sequences)
+- Stated constraint (simple, basic colors only)
+- Result: 3 commits, done quickly
 
-**dikuclient PR #54** (3 commits, <8 hours):
+### Real Example: morpheum PR #10 (1 commit, 1h 18m)
+
+**What the developer wrote:**
 ```markdown
-Problem: Color codes display as garbage
-Context: ANSI escape sequences not being parsed
-Solution: Add regex-based color parser
-Constraints: As simple as possible, handle basic colors only
+"Integrate Copilot provider alongside existing OpenAI provider.
+
+Context: We have LLMClient interface from PR #2
+Need: Same interface pattern, add streaming support
+Constraint: Minimal changes to existing code
+
+Implement this cleanly"
 ```
 
-**DikuMUD** (multiple PRs):
-```markdown
-Problem: [Specific bug]
-Context: [Affected area]
-Solution: Make this fix as small as possible
-```
+**Why this worked:**
+- Referenced existing code (LLMClient interface)
+- Specific need (streaming support)
+- Clear constraint (minimal changes)
+- Result: 1 commit, 78 minutes
 
-Result: Surgical changes, minimal disruption, fast review.
+### The Pattern
+
+**Write prompts that include:**
+1. **Specific problem/feature** ("Color codes display as garbage")
+2. **Context** (why/where/impact)
+3. **Constraints** ("minimal changes", "keep it simple")
+4. **Reference points** (existing code, files, interfaces)
+
+**Don't write:**
+- ❌ "Fix the color issue" (too vague)
+- ❌ Long detailed specs about how AI should structure the fix
+- ❌ Step-by-step implementation instructions
+
+AI figures out the approach when you give clear problem + context + constraints.
 
 ### Constraint Patterns That Work
 
@@ -158,21 +163,25 @@ $ pytest
 - Flaky tests ignored
 - Coverage drops over time
 
-### Test Prompt Formula
+### How to Prompt for Test-First Development
 
+**Focus on the behavior you want**, not the test structure (AI knows TDD).
+
+**Good prompt:**
 ```markdown
-Please add [feature] with test-first approach:
+"Add timeout handling to Client.connect().
 
-1. First, write a test that demonstrates [desired behavior]
-2. Run the test to verify it fails with [expected error]
-3. Implement the feature to make the test pass
-4. Run all tests to ensure no regressions
+Desired behavior: Should raise TimeoutError after 1 second on slow connections
+Test scenario: Connect to slow.server.example.com with timeout=1
 
-The test should validate:
-- [ ] Happy path: [scenario]
-- [ ] Error case: [scenario]  
-- [ ] Edge case: [scenario]
+Use test-first: write failing test, then implement"
 ```
+
+**Why it works:**
+- Specific behavior (raise TimeoutError after 1 second)
+- Concrete scenario (slow.server.example.com)
+- Mentions TDD but doesn't dictate test structure
+- AI writes the test automatically
 
 ## Plan for Refinement Cycles
 
