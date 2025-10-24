@@ -13,35 +13,35 @@ Sustainable velocity requires periodic consolidation. This section shows you how
 
 Every 10-15 feature PRs, have AI help you consolidate.
 
-### Consolidation Prompt Template
+### How to Prompt for Consolidation
 
+Focus on **what needs attention**, not how to organize the work (AI handles that).
+
+**What to include in your prompt:**
+- **Which PRs** to review
+- **Specific gaps** you've noticed (missing tests, outdated docs)
+- **Known issues** (flaky tests, duplicated code)
+- **Quality goals** (coverage target, performance)
+
+**Example from dikuclient PR #15:**
 ```markdown
-We've completed PRs #[start]-#[end] with new features.
+"Consolidation checkpoint after PRs #1-14.
 
-Please create a consolidation PR that:
+Gaps noticed:
+- PRs #8, #11, #13 lack tests
+- README outdated (missing new commands)
+- One flaky connection test
+- Color codes feature undocumented
 
-## Testing
-- Add tests for features from PR #X, #Y, #Z that lack them
-- Fix any flaky tests
-- Target [X]% coverage (currently [Y]%)
+Goals:
+- Coverage from 45% to 68%
+- All features documented
+- No flaky tests
 
-## Documentation
-- Update README with new features
-- Document [complex feature] in detail
-- Add usage examples for [API/feature]
-
-## Technical Debt
-- Refactor [duplicated code pattern]
-- Improve error messages in [module]
-- Remove any deprecated features marked for removal
-
-## Validation
-- Run full test suite
-- Check all examples still work
-- Verify performance hasn't regressed
-
-Keep changes focused on quality, not new features.
+Focus on quality, not new features"
 ```
+
+**Why it worked:** Specific gaps, clear goals, explicit scope (no new features).
 
 Every 10-15 feature PRs, pause to consolidate. This isn't "slowing down"—it's maintaining the capacity to move fast.
 
