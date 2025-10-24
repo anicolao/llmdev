@@ -15,29 +15,11 @@ When facing a complex feature, prompt AI to evaluate at least two different impl
 
 ### How to Prompt for Design Analysis
 
-Focus on **describing the problem clearly**, not telling AI how to structure analysis (it knows how).
+Focus on **describing the problem clearly**. The actual dikuclient Issue #1 demonstrates this:
 
-**What to include in your prompt:**
-- **The problem**: What needs to be solved
-- **Constraints**: What limits your options
-- **Context**: Why this matters
-- **Request**: "analyze alternatives and recommend"
+> "Write a design doc *only*, no code, that specifies the overall structure of such a client for approval before we begin implementing. Justify the language choice and outline the approach for the TUI, and explain how it will work inside the browser interface."
 
-**Example from dikuclient:**
-```markdown
-"We need to handle ANSI color codes from the MUD server.
-
-Context: Terminal output with escape sequences
-Constraint: Keep it simple for MVP, we can enhance later
-Request: Analyze 2-3 approaches and recommend one"
-```
-
-**What AI does automatically** (you don't need to specify):
-- Generates alternative approaches
-- Lists pros/cons for each
-- Estimates complexity
-- Recommends best option
-- Explains rationale
+This asks for design before implementation, with justification required for choices.
 
 ### Why This Pattern Works
 
@@ -52,35 +34,15 @@ Request: Analyze 2-3 approaches and recommend one"
 - Avoid premature optimization
 - Build confidence through comparison
 
-## Example: AI-Generated Design Alternatives
+## Real Example from Case Studies
 
-**Context from dikuclient:** Need to handle ANSI color codes from server
+**dikuclient's design-first pattern:**
 
-**Prompt to AI:**
-```markdown
-We need to handle ANSI color codes from the MUD server.
-Analyze 2-3 different approaches and recommend one.
-```
+The project started with Issue #1 asking for a design document before any code. This established the architecture and made subsequent implementation smooth.
 
-**AI's Analysis:**
+See PR #2 (ANSI color support, 2 commits) and other early PRs in the [dikuclient case study](https://github.com/anicolao/llmdev/blob/main/case_studies/GITHUB_ANICOLAO_DIKUCLIENT.md) for examples of features implemented efficiently after design was established.
 
-**Alternative 1: Client-side parsing**
-- Parse ANSI codes in client JavaScript
-- Convert to HTML/CSS styling
-- **Pro**: Full control, can add enhancements
-- **Con**: Complex parser, potential bugs, maintenance burden
-
-**Alternative 2: Terminal emulation library**
-- Use existing `blessed` or `xterm.js` library
-- **Pro**: Battle-tested, handles edge cases
-- **Con**: Larger dependency, some features unused
-
-**Alternative 3: Minimal regex replacement**
-- Simple regex to convert basic colors only
-- **Pro**: Tiny, easy to understand, sufficient for MVP
-- **Con**: Doesn't handle all ANSI codes
-
-**Decision from case study**: Started with Alternative 3 in PR #2 (2 commits). Right complexity for MVP phase. Later enhanced incrementally as needed.
+**DikuMUD PR #162** used design-first approach for complex features, preventing 3-4 refactor cycles. See [DikuMUD case study](https://github.com/anicolao/llmdev/blob/main/case_studies/GITHUB_ANICOLAO_DIKUMUD.md) for details.
 
 ## When to Use Design Analysis
 
@@ -156,51 +118,15 @@ When AI recommends full design analysis, use this template:
 
 Give this template to AI and have it fill it out before coding.
 
-## Real-World Prompt Patterns
+## Real Patterns from Case Studies
 
-### Pattern 1: Problem Description
+### DikuMUD PR #119: Zone Validation Tool
 
-From DikuMUD PR #119 (zone validation):
-```markdown
-"3D room layouts have consistency errors - 35 found manually.
+DikuMUD needed to validate 3D room layouts. The case study documents how a BFS-based graph validator was built to automatically catch geometry errors. See [DikuMUD case study](https://github.com/anicolao/llmdev/blob/main/case_studies/GITHUB_ANICOLAO_DIKUMUD.md) PR #119 for details.
 
-Problem: Manual validation doesn't scale
-Context: Spatial relationships in MUD zones
-Need: Automated validation that catches all errors
+### morpheum PR #10: Provider Integration  
 
-Analyze approaches and recommend one"
-```
-
-**Why it worked:** Clear problem, specific context, focused request. AI proposed BFS-based graph validator.
-
-### Pattern 2: Integration Challenge
-
-From morpheum PR #10 (Copilot integration):
-```markdown
-"Need to integrate Copilot provider alongside OpenAI.
-
-Context: We have LLMClient interface from PR #2
-Requirement: Same interface, add streaming support
-Constraint: Minimal changes to existing code
-
-Analyze how to add this cleanly"
-```
-
-**Why it worked:** Referenced existing code, stated constraints. Result: 1 commit, 1h 18m.
-
-### Pattern 3: Implementation from Design
-
-Once design is chosen:
-```markdown
-"Implement the BFS-based validator from the design analysis.
-
-Focus on: Finding all connectivity errors
-Test: Should catch the 35 known errors
-
-Keep it simple for now - enhancements later"
-```
-
-**Key**: Focus on WHAT (problem, context, constraints) not HOW (AI handles analysis structure).
+morpheum added Copilot provider integration in 1 commit (1h 18m). The PR successfully reused existing LLMClient interface pattern. See [morpheum case study](https://github.com/anicolao/llmdev/blob/main/case_studies/GITHUB_ANICOLAO_MORPHEUM.md) for analysis of what made this efficient.
 
 ## Organization Patterns
 
@@ -286,27 +212,11 @@ You're organized if:
 
 **Evidence**: Projects with design-first approach averaged 3 commits/PR. Projects without averaged 6-8 commits/PR (double the iteration).
 
-## Common Pitfalls
+## Key Insight from Case Studies
 
-### Analysis Paralysis
-Spending days on design docs for simple features.
+Projects with design-first approach averaged 3 commits/PR. Projects without averaged 6-8 commits/PR (double the iteration).
 
-**Fix**: Use decision tree above. Most features are "quick implementation."
-
-### False Alternatives
-"Alternative 1: Do it. Alternative 2: Don't do it."
-
-**Fix**: Alternatives should be different implementation approaches, not whether to implement.
-
-### Choosing Favorites
-Already decided, then manufacturing alternatives to justify it.
-
-**Fix**: Generate alternatives before deciding. You might be surprised which is actually best.
-
-### Ignoring Design
-"Let's just start coding and see what happens."
-
-**Fix**: Code-first works for MVP, but design-first prevents rework for complex features.
+**Evidence**: See velocity metrics in the [case studies](https://github.com/anicolao/llmdev/tree/main/case_studies) for detailed analysis.
 
 ## What's Next?
 
