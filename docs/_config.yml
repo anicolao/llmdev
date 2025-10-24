@@ -1,0 +1,37 @@
+# GitHub Pages configuration for LLM Development site
+title: LLM Development
+description: Proven practices for building software with AI assistance
+baseurl: "/llmdev"
+url: "https://anicolao.github.io"
+
+# Build settings
+theme: minima
+markdown: kramdown
+
+# Navigation
+header_pages:
+  - index.md
+  - getting-started.md
+  - staying-organized.md
+  - leveling-up.md
+  - sharpen-the-saw.md
+  - about.md
+
+# Collections
+collections:
+  case_studies:
+    output: true
+    permalink: /case-studies/:name
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor
