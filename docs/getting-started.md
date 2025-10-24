@@ -13,23 +13,29 @@ When starting a new project with AI assistance, three elements set you up for su
 
 Your README is the contract between you and the AI. Use AI to create it, following this proven structure.
 
-### Prompt AI to Create Your README
+### How to Prompt AI for Your README
 
-**Prompt template:**
+The key is **what you tell the AI about your project**, not what sections to create (AI handles structure automatically).
+
+**What makes an effective prompt:**
+- **The problem** you're solving
+- **Key features** (2-3 specific capabilities)
+- **Target users** or use cases
+- **Technology choices** (if you have preferences)
+
+**Example prompt from dikuclient case study:**
 ```markdown
-Create a README.md for a [project type] that [brief description].
+Create a README for an efficient, modern DikuMUD client. 
 
-Include these sections:
-- Overview: What this project does (2-3 sentences)
-- Purpose: Why it exists and what problem it solves
-- Installation: Exact commands to get started
-- Usage: Concrete examples with actual commands
-- Testing: How to validate it works
+It should have two modes:
+(1) TUI directly in terminal
+(2) TUI in web browser using websocket->socket proxy
 
-Keep it concise and specific. Use [dikuclient example below] as a style guide.
+Key features: ANSI color support, command history, triggers and aliases.
+Target: MUD players who want a modern client experience.
 ```
 
-**Example README structure (from dikuclient case study):**
+**What AI generated from this:**
 ```markdown
 # Diku Client
 A MUD client for Diku with modern features
@@ -49,34 +55,51 @@ npm install
 npm start -- --host diku.mud.example.com --port 4000
 ```
 
-### Why This Matters
+### Prompt Writing Tips
 
-A clear README gives the AI:
-- **Context** about what you're building
-- **Constraints** on how it should work
-- **Success criteria** to validate against
+**Good prompts include:**
+- Specific problem or need ("MUD client for DikuMUD")
+- 2-3 key features or modes
+- Target user or use case
+- Technical preferences (optional)
 
-**Evidence**: All 4 analyzed projects started with clear READMEs. Projects with vague READMEs needed more iteration (6+ commits vs 1-3 commits for clear specs).
+**Avoid:**
+- ❌ "Create a README for my project" (too vague)
+- ❌ Long detailed specifications (AI gets confused)
+- ❌ Telling AI what sections to include (it knows this)
+
+**Pattern**: Brief (2-4 sentences) + Specific (features/modes) + Focused (one clear purpose)
+
+**Evidence**: Projects with focused initial prompts needed 1-3 commits. Vague prompts needed 6+ commits of back-and-forth.
 
 ## 2. Have AI Create a Compelling VISION
 
 Your VISION document captures the "why" and guides long-term direction. Use AI to create it following this proven template.
 
-### Prompt AI to Create Your VISION
+### How to Prompt AI for Your VISION
 
-**Prompt template:**
+Focus on **why your project matters** and **what guides your decisions**. AI will handle the structure.
+
+**What makes an effective prompt:**
+- **The problem** in the world today
+- **Your solution approach** (mission)
+- **2-4 principles** that guide decisions
+- **How you'll know** you're succeeding
+
+**Example prompt from llmdev:**
 ```markdown
-Create a VISION.md for [project name] that [mission statement].
+Create a VISION for a project that systematically studies how LLMs are used to build real software.
 
-Use this structure:
-- The Challenge: What problem exists today
-- Our Mission: What we're building and why
-- Core Principles: 3-4 guiding principles for decisions
-- Success Criteria: 3-5 measurable outcomes
-- Open Questions: What we're still figuring out
+The problem: We're learning how to use AI tools effectively, but lack systematic analysis of what works.
 
-Style it like the llmdev VISION.md example below.
+Mission: Analyze real LLM-assisted projects to distill actionable insights for developers.
+
+Principles: Evidence-based (real data), balanced (strengths and limitations), knowledge sharing (open findings).
+
+Success: Developers make better decisions, tools improve, quality increases measurably.
 ```
+
+**What AI generated from this:**
 
 **Example VISION structure (from llmdev case study):**
 
@@ -110,21 +133,32 @@ for the entire development community.
 
 Don't aim for perfection—prompt AI to build the smallest thing that works and can serve as the kernel for growth.
 
-### Prompt AI to Create Your MVP
+### How to Prompt AI for Your MVP
 
-**Prompt template:**
+Focus on **one core feature** that proves the concept. Specify constraints to keep it tiny.
+
+**What makes an effective MVP prompt:**
+- Reference README/VISION (gives context)
+- **ONE specific feature** to implement
+- Explicit constraints ("minimal", "2-4 hours")
+- **Technology choice** (language/framework)
+
+**Example prompt from morpheum:**
 ```markdown
-I've created README.md and VISION.md (see attached files).
+Based on the README and VISION: Create a TypeScript project that integrates with OpenAI API.
 
-Please create a tiny MVP that:
-- Sets up [language/framework] project structure  
-- Implements ONLY [one core feature from README]
-- Has one test that validates it works
-- Can build and run successfully
+Implement ONLY: Send a prompt to OpenAI and get a response.
 
-Make this as minimal as possible—we'll add features incrementally.
-Target: Working in 2-4 hours, not days.
+Constraints:
+- Use TypeScript + Node.js
+- One test that validates it works
+- Working in 2-4 hours, not days
+- Everything else comes later
+
+This is the kernel—we'll build on it incrementally.
 ```
+
+**What this produced:**
 
 ### MVP Checklist
 
@@ -175,72 +209,98 @@ Result: Working prototype in 3 hours. 73 more PRs refined and extended it.
 
 ## Quick Start Formula
 
-Use AI to create all three elements following these proven patterns:
+Focus on **what to tell AI** about your project, not how to structure the output.
 
-```bash
-# Step 1: Have AI Create Foundation (1 hour)
-"Create a README.md for [project] that [description]"
-# Review and refine
-
-"Create a VISION.md for [project] with mission: [statement]"  
-# Review and refine
-
-# Step 2: Have AI Build MVP (2-4 hours)
-"Using the README and VISION, create a tiny MVP that [one feature]"
-# Verify it works
-
-# Step 3: Verify Success (30 minutes)
-- Build succeeds
-- Tests pass
-- Can run and see output
-
-# Step 4: Start Iterating (Day 2+)
-"Looking at README.md and VISION.md, add [next feature]"
-# One feature at a time
-# Reference README/VISION in each prompt
-```
-
-## Effective Prompts for AI
-
-### Initial Setup Prompt
-
-Use this pattern (from successful case studies):
+### Step 1: README Prompt (5 minutes to write, AI creates in seconds)
 
 ```markdown
-I want to create a [project type] that [specific purpose].
+"Create a README for [type of project] that [core purpose].
 
-Please create:
-1. README.md with overview, purpose, installation, usage
-2. VISION.md with mission, principles, success criteria
-3. A tiny MVP in [language/framework] that:
-   - Implements just [ONE core feature]
-   - Has one test
-   - Builds and runs
-
-Make everything as minimal as possible - we'll iterate.
-Style: professional, concise, actionable.
+Key features: [2-3 specific capabilities]
+Target users: [who will use this]
+Tech: [language/framework if you have preference]"
 ```
 
-### Feature Addition Prompt
+**Example**: "Create a README for a MUD client with terminal and web browser modes. Key features: ANSI colors, command history, triggers. Target: MUD players. Tech: Go or Rust."
 
-Once you have the foundation:
+### Step 2: VISION Prompt (5 minutes to write, AI creates in seconds)
 
 ```markdown
-Looking at our README.md and VISION.md, I want to add [feature].
+"Create a VISION for [project] that [mission].
+
+Problem: [what's wrong today]
+Solution: [your approach]
+Principles: [2-4 decision guides]
+Success: [how you'll measure it]"
+```
+
+**Example**: "Create a VISION for analyzing LLM-assisted development. Problem: lack systematic understanding. Solution: analyze real projects. Principles: evidence-based, balanced, open. Success: developers improve, tools improve."
+
+### Step 3: MVP Prompt (10 minutes to write, AI builds in 2-4 hours)
+
+```markdown
+"Using README and VISION: Create [tech stack] project.
+
+Implement ONLY: [one specific feature]
+Constraints: minimal, 2-4 hours, one test
+Everything else later"
+```
+
+**Example**: "Using README and VISION: Create TypeScript+Node project. Implement ONLY: connect to server and echo messages. Constraints: minimal, 2-4 hours, one test."
+
+### Step 4: Iteration (ongoing)
+
+```markdown
+"Add [specific feature]. Keep changes minimal. Reference README/VISION."
+```
+
+## What Makes Prompts Effective
+
+Learn from patterns in successful case studies.
+
+### Anatomy of a Good Initial Prompt
+
+**dikuclient's winning formula:**
+1. **Clear objective**: "efficient, modern DikuMUD client"
+2. **Specific modes**: "TUI in terminal OR web browser via websocket"
+3. **Key constraints**: "Go or Rust" (gave options, required justification)
+4. **Scope control**: "Write design doc only, no code"
+
+**Why it worked:** Specific enough to guide AI, flexible enough to get good suggestions.
+
+### Anatomy of a Good Feature Prompt
+
+**Pattern from morpheum (PR #10):**
+```markdown
+"Integrate Copilot provider alongside OpenAI.
 
 Requirements:
-- [Specific requirement 1 with example]
-- [Specific requirement 2 with example]
+- Same LLMClient interface
+- Support streaming responses
+- Handle authentication
 
-Constraints:
-- Make changes as small as possible
-- Maintain backward compatibility
-- Stay aligned with our vision
-
-Success criteria:
-- [ ] [Testable outcome]
-- [ ] All existing tests pass
+Constraints: minimal changes, reuse existing patterns"
 ```
+
+**Why it worked:** 
+- Referenced existing code (LLMClient interface)
+- Specific requirements (not "make it better")
+- Clear constraints (minimal changes)
+- Result: 1 commit, 1h 18m
+
+### Prompt Writing Principles
+
+**Do:**
+- ✅ Be specific about the problem/feature
+- ✅ Give 2-3 concrete requirements
+- ✅ State explicit constraints ("minimal", "2-4 hours")
+- ✅ Reference existing docs (README/VISION)
+
+**Don't:**
+- ❌ Tell AI what sections/structure to create (it knows)
+- ❌ Write long detailed specs (AI gets confused)
+- ❌ Be vague ("make it better", "add features")
+- ❌ Ask for everything at once
 
 ## Success Metrics (from Case Studies)
 
