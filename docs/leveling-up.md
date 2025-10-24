@@ -5,44 +5,42 @@ title: How To Level Up
 
 # How To Level Up
 
-Once you've mastered the basics, advanced patterns unlock extraordinary productivity. These techniques come from analyzing projects that sustained 3-11 PRs/day for weeks while maintaining quality.
+Once you've mastered the basics, advanced prompting patterns unlock extraordinary productivity. These techniques come from analyzing projects that sustained 3-11 PRs/day for weeks.
 
-## Rapid Iteration Culture
+**Proven by evidence:** Projects using these advanced patterns achieved 80% of PRs in 1-3 commits, compared to 6+ commits without them.
 
-Accept "good enough to iterate" over "perfect before merging." Speed comes from tight feedback loops, not from getting it right the first time.
+## Advanced Prompting for Rapid Iteration
 
-### The 1-3 Commit Sweet Spot
+The key is crafting prompts that give AI exactly the right constraints and context.
 
-**Target**: 80% of PRs complete in 1-3 commits
+### Target the 1-3 Commit Sweet Spot
 
-**What this means:**
-- Requirements are clear enough that AI hits target quickly
-- You've scoped work appropriately
-- Fast feedback validates you're on track
+**Goal**: Have AI complete 80% of features in 1-3 commits
 
-**Evidence**: Projects achieving this velocity:
-- dikuclient: 3.5 PRs/day for 18 days (63 PRs total)
-- DikuMUD: 11 PRs/day for 15 days (165 PRs total)
-- morpheum: 10 PRs in 17 hours
+**How to achieve this:**
+- Clear requirements in your prompts
+- Appropriate scope (one feature at a time)
+- Fast feedback loop
 
-### When High Iteration is Good
+**Evidence from case studies:**
+- dikuclient: 3.5 PRs/day, average 2.8 commits/PR in feature phase
+- DikuMUD: 11 PRs/day, average 2.1 commits/PR in polish phase
+- morpheum: 10 PRs in 17 hours, most 1 commit each
 
-Some PRs naturally take 6-15 commits. This is expected when:
+### When to Expect More Iterations
 
-- **Learning new domain**: First websocket integration, first API design
-- **Foundation work**: Core abstractions that everything else builds on
+Some features naturally take 6-15 commits with AI. This is normal for:
+
+- **Learning new domains**: First time AI tackles a pattern
+- **Foundation work**: Core abstractions everything builds on
 - **Complex algorithms**: Spatial validation, graph traversal
 - **Integration points**: Connecting multiple systems
 
-**Example**: dikuclient PR #3 took 15 commits building the networking foundation. Every subsequent networking feature took 1-3 commits because foundation was solid.
+**Example**: dikuclient PR #3 took 15 commits building networking foundation. Every subsequent networking feature took 1-3 commits because AI had the foundation to work from.
 
-**Key**: High iteration on foundations → Low iteration on features built on those foundations.
+**Pattern**: High iteration on foundations → Low iteration on features
 
-## Specific, Constrained Prompts
-
-Vague prompts get vague results. Specific prompts with constraints get surgical changes.
-
-### The Problem-Context-Solution Structure
+## The Problem-Context-Solution Prompt Structure
 
 ```markdown
 ## Problem
