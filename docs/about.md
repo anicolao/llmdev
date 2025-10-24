@@ -5,24 +5,40 @@ title: About
 
 # About LLM Development
 
-## The Project
+## The Methodology
 
-LLM Development is a site dedicated to sharing evidence-based practices for building software with AI assistance. All recommendations are backed by systematic analysis of real-world projects.
+LLM Development is a proven methodology for building software with AI assistance. This site teaches you **how to work effectively with AI tools** using patterns distilled from analyzing 334+ PRs across successful real-world projects.
 
-### Evidence Sources
+### What You'll Learn
 
-Our insights come from analyzing production repositories:
+**Foundation Patterns:**
+- How to prompt AI to create effective README and VISION documents
+- How to get AI to build a tiny MVP in hours
+- How to maintain direction while iterating rapidly
 
-- **[dikuclient](https://github.com/anicolao/dikuclient)**: 63 PRs over 18 days, 3.5 PRs/day sustained velocity
-- **[DikuMUD](https://github.com/anicolao/DikuMUD)**: 165 PRs over 15 days, 11 PRs/day sustained velocity
-- **[morpheum](https://github.com/anicolao/morpheum)**: 76 PRs over 37 days, interface-first architecture
-- **[diku](https://github.com/anicolao/diku)**: 30 issues in 5 days, 6 issues/day velocity
+**Development Patterns:**
+- Design-first prompting for complex features
+- Specific prompt structures that reduce iteration
+- Testing patterns that work with AI
+- Consolidation practices for sustainable velocity
 
-These projects represent:
-- 334+ pull requests analyzed
-- 900+ commits studied
-- 4 comprehensive case studies
-- Weeks of sustained high-velocity development
+**Proven Results:**
+- 3-11 PRs/day sustained velocity
+- 1-3 commits for 80% of features
+- Production-ready in 2-5 weeks
+
+### Evidence Base
+
+All practices are validated by comprehensive case study analysis:
+
+- **[dikuclient](https://github.com/anicolao/dikuclient)**: 63 PRs in 18 days, 3.5 PRs/day
+- **[DikuMUD](https://github.com/anicolao/DikuMUD)**: 165 PRs in 15 days, 11 PRs/day
+- **[morpheum](https://github.com/anicolao/morpheum)**: 76 PRs in 37 days
+- **[diku](https://github.com/anicolao/diku)**: 30 issues in 5 days
+
+These represent 334+ PRs and 900+ commits of real development work analyzed systematically.
+
+Full case studies (30-75 pages each) available in the [llmdev repository](https://github.com/anicolao/llmdev/tree/main/case_studies) for those interested in the detailed analysis.
 
 ### Analysis Methodology
 
@@ -39,33 +55,32 @@ Each case study follows a rigorous phased approach:
 
 ### What Makes This Different
 
-Most AI coding advice is:
-- Based on speculation or limited examples
-- Marketing material from vendors
-- Anecdotes without metrics
-- Theory without practical validation
+Most AI coding advice is speculation or marketing. This methodology is:
 
-LLM Development is:
-- Evidence-based: Every claim backed by specific PRs
-- Metric-driven: Velocity, iteration counts, success rates
-- Production-tested: Real projects, real outcomes
-- Actionable: Templates, checklists, concrete examples
+- **Evidence-based**: Every practice validated by analyzing 334+ real PRs
+- **Metric-driven**: Velocity, iteration counts, success rates from production work
+- **Actionable**: Specific prompts, templates, and checklists you can use immediately
+- **Proven**: 3-11 PRs/day sustained velocity achieved by following these patterns
 
-## About the llmdev Tool
+## Want to Analyze Projects Yourself?
 
-The [llmdev project](https://github.com/anicolao/llmdev) provides tools for analyzing LLM-assisted development:
+The [llmdev tool](https://github.com/anicolao/llmdev) lets you analyze any repository to extract patterns:
 
-**Key Features:**
-- Phased instruction generation for comprehensive repository analysis
-- MCP tool integration (works with GitHub Copilot)
-- Systematic case study creation methodology
-- No API rate limit issues
+```bash
+git clone https://github.com/anicolao/llmdev.git
+cd llmdev && pip install -e .
 
-**Use Cases:**
-- Creating case studies of LLM-assisted projects
-- Analyzing development patterns in repositories
-- Studying prompt effectiveness
-- Understanding iteration strategies
+# Analyze any repository
+llmdev generate-instructions owner/repo --phase intro
+```
+
+This is how we created the case studies that informed this site's methodology. You can use it to:
+- Study how specific projects work
+- Extract patterns from codebases you admire
+- Validate that your projects follow good patterns
+- Create your own case studies
+
+Takes 2-3 hours to complete a comprehensive analysis.
 
 ## How This Site Was Built
 

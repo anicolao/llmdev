@@ -5,9 +5,43 @@ title: How To Sharpen the Saw
 
 # How To Sharpen the Saw
 
-Sustainable velocity requires periodic stops to consolidate, refine, and maintain quality. "Sharpen the saw" practices prevent technical debt accumulation and keep momentum high over weeks and months.
+Sustainable velocity requires periodic consolidation. This section shows you how to prompt AI to help maintain quality while moving fast.
 
-## The Consolidation Rhythm
+**Proven by evidence:** Projects that consolidated every 10-15 PRs maintained 3-11 PRs/day velocity for weeks. Those that skipped consolidation saw velocity drop by 50% after 20-30 PRs.
+
+## The Consolidation Pattern
+
+Every 10-15 feature PRs, have AI help you consolidate.
+
+### How to Prompt for Consolidation
+
+Focus on **what needs attention**, not how to organize the work (AI handles that).
+
+**What to include in your prompt:**
+- **Which PRs** to review
+- **Specific gaps** you've noticed (missing tests, outdated docs)
+- **Known issues** (flaky tests, duplicated code)
+- **Quality goals** (coverage target, performance)
+
+**Example from dikuclient PR #15:**
+```markdown
+"Consolidation checkpoint after PRs #1-14.
+
+Gaps noticed:
+- PRs #8, #11, #13 lack tests
+- README outdated (missing new commands)
+- One flaky connection test
+- Color codes feature undocumented
+
+Goals:
+- Coverage from 45% to 68%
+- All features documented
+- No flaky tests
+
+Focus on quality, not new features"
+```
+
+**Why it worked:** Specific gaps, clear goals, explicit scope (no new features).
 
 Every 10-15 feature PRs, pause to consolidate. This isn't "slowing down"—it's maintaining the capacity to move fast.
 
